@@ -1,0 +1,59 @@
+<%- include('../layout/userHeader.ejs')%>
+<section class="userPage">
+    <div class="container">
+        <div class="header">
+            <h2>LOGIN</h2>
+        </div>
+        <form class="form"  action="/userLogin" method="post" onsubmit="return loginValidate()">
+            <% if(errMsg){%>
+                <div class="errorstyle">
+                    <p style="text-align:center; color: rgb(255, 0, 0);">
+                        <%= errMsg %>
+                    </p>
+                </div>
+                <% } %>
+            <div class="form-control">
+                <label for="username">Email</label>
+                <input type="email" placeholder="Enter your Email" name="email" id="email" />
+                <small id="emailError"></small>
+            </div>
+            <div class="form-control">
+                <label for="username">Password</label>
+                <input type="password" placeholder="Enter your Password" name="password" id="password"/>
+                <small id="passwordError"></small>
+            </div>
+            <span>
+                <a class="txt2 text-decoration-none me-5" href="/forgotPass">
+                 Forgot Password?
+                </a>
+            </span>
+
+            <span> 
+                <a class="txt2 text-decoration-none ms-5" href="/signUp">
+                    Create your Account
+                    <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                </a>
+            </span>
+            <!-- <div style="text-align: right;">                
+            <a class="pe-3" href="/signup" class="text signup-text ">Signup Now</a>
+            </div> -->
+            <button type="submit">Login Now</button>
+        </form>
+    </div>
+</section>
+<style>
+    .txt1 {
+  font-family: Poppins-Regular;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #999999;
+}
+
+.txt2 {
+  font-family: Poppins-Regular;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #666666;
+}
+</style>
+<%- include('../layout/userFooter.ejs')%>

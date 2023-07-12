@@ -1,0 +1,59 @@
+<%-include('../layout/userHeader.ejs') %>
+    
+<section class="userPage">
+    <div class="container">
+        <div class="header">
+            <h2>SIGNUP</h2>
+        </div>
+        <form class="form" action="/registerUser" method="POST" onsubmit="return signupValidate()">
+            <% if(errMsg){%>
+                <div class="errorstyle">
+                    <p style="text-align:center; color: rgb(255, 0, 0);">
+                        <%= errMsg %>
+                    </p>
+                </div>
+            <% } %>
+            <div class="form-control">
+                <label for="username"> Name</label>
+                <input type="text" placeholder="Enter your  Name" name="name" id="name"/>
+                <small id="nameError"></small>
+            </div>
+            <div class="form-control">
+                <label for="username">User Name</label>
+                <input type="text" placeholder="Enter your User Name" name="userName" id="userName"/>
+                <small id="unameError"></small>
+            </div>
+            <div class="form-control">
+                <label for="username">Email</label>
+                <input type="email" placeholder="Enter your Email" name="email" id="email"/>
+                <small id="emailError"></small>
+            </div>
+            <div class="form-control">
+                <label for="username">Mobile No.</label>
+                <input type="number" placeholder="Enter your Mobile No." name="phoneNumber" id="phoneNumber"/>
+                <small id="mobileError"></small>
+            </div>
+            <div class="form-control">
+                <label for="password">Password</label>
+                <input type="password" placeholder="Enter your Password" name="password" id="password" />
+                <small id="passwordError"></small>
+            </div>
+            <div class="form-control">
+                <label for="password">Confirm Password</label>
+                <input type="password" placeholder="Enter your Confirm Password" name="confirm_Password" id="confirm_Password" />
+                <small id="confirmPaswordError"></small>
+            </div>
+            <div style="text-align: right;">
+                <span>Do You have an Account?
+                                    
+            <a class="pe-3" href="/login" class="text signup-text">Login Now</a>
+                </span>
+
+                <button type="submit" >Signup Now</button>  
+            </div>
+            
+        </form>
+    </div>
+</section>
+<%-include('../layout/userFooter.ejs') %>
+    

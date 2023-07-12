@@ -1,0 +1,199 @@
+:root {
+    --main-color: #22495E;
+    --color-dark: #1d2231;
+    --text-grey: #8390a2;
+    --orange: #ff7800;
+    --black: #130f40;
+    --light-color: #666;
+    --box-shadow: 0.5rem 1rem rgba(0, 0, 0, .1);
+    --border: .2rem solid rgba(0, 0, 0, .1);
+    --outline: .1rem solid rgba(0, 0, 0, .1);
+    --outline-hover: .2rem solid var(--black);
+}
+
+
+.user-navabr {
+    /* background: url('img/small.jpg'); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0 20px;
+}
+
+.homeNavBarTitle {
+    font-family: 'Lobster', cursive;
+    font-weight: bold;
+    font-size: 30px;
+
+}
+
+.userNavbar .dropdown-menu {
+    background: rgb(248, 255, 214);
+}
+
+.user-navabr .login-btn {
+    background: #AAFFA1;
+    color: rgb(0, 0, 0);
+    font-weight: 500;
+    transition: 1s;
+    font-size: 15px;
+}
+
+.user-navabr .login-btn:hover {
+    background: rgb(0, 0, 0);
+    color: #AAFFA1;
+}
+.user-navabr .icons{
+    margin: 0 10px;
+}
+.user-navabr .icons div{
+    height: 25px;
+    width: 25px;
+    line-height: 1.5rem;
+    border-radius: .5rem;
+    background: #eee;
+    color: var(--black);
+    font-size: 20px;
+    margin-left: .3rem;
+    text-align: center;
+    cursor: pointer;
+}
+.user-navabr .icons div:hover{
+    background-color: var(--orange);
+    color: #fff;
+}
+.product-offer {
+    margin-bottom: 30px;
+    height: 200px;
+    width: 387.656px;
+    position: relative;
+}
+
+.product-offer img {
+    width: 100%;
+    object-fit: contain;
+}
+
+/* offer 1st Section */
+/* .offer .carousel-item{
+    height: 430px;
+} */
+.offer .product-offer{
+    height: 200px;
+}
+
+.service .card{
+    padding: 30px;
+}
+.service .card h1{
+    color: #FFD333;
+    font-weight: 900;
+    font-size: 2.5rem;
+    margin-right: 1rem;
+}
+.service .card label{
+    font-size: 1.25rem;
+    font-weight: bolder;
+    color: #3D464D;
+}
+.category .card{
+    border: 0;
+    border-radius: 0;
+}
+.category .card img{
+    border-radius: 0;
+    object-fit: contain;
+    height: 100%;
+}
+.category .row h6{
+    font-size: 1rem;    
+    color: #3D464D;
+    font-weight: bold;
+}
+.category .title h1,
+.featured-products .title h1{
+    text-transform: uppercase;
+    font-size: 2rem;
+    color: #3D464D;
+    font-weight: 700;
+}
+.featured-products .product-item img{
+    width: 100%;
+    height: 283.250px;
+    object-fit: contain;
+}
+.featured-products .card a{
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #3D464D;
+}
+.featured-products .card h5{
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #3D464D;
+}
+.featured-products .card h6{
+    margin-left: .5rem;
+}
+.featured-products .product-item,
+.category .product-item{
+    width: 100%;
+}
+.text-center{
+    height: 170px;
+}
+.viewmorebtn{
+    text-align: center;
+}
+.pro-button{
+    margin: 0 5px;
+    border-radius: 2px;    
+}
+
+/* Wishlist */
+.wishlist{
+    margin: 0 64px;
+    background-color: #fff;
+}
+.wishlist a{
+    color: #000;
+}
+.wishlist-title,
+.wishlist .content-item
+{
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+.wishlist-title .title{
+    font-size: 17px;
+    font-weight: 500;
+}
+.wishlist .content-item .image {
+    width: 100px;
+    height: 100px;
+}
+.wishlist img{
+    width: 100%;
+    height: 100%;
+}
+.wishlist .content-item .product{
+    padding-left: 25px;
+}
+.wishlist .content-item .product-Name{
+font-weight: 400;
+font-size: 15px;
+display: block;
+cursor: pointer;
+margin-bottom: 5px;
+}
+.wishlist .content .s-rate{
+    font-size: 22px;
+    display: inline-block;
+    font-weight: 500;
+}
+.wishlist .content .a-rate{
+    margin-left: 10px;
+    font-size: 14px;
+    display: inline-block;
+    color: #878787;
+}
