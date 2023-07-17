@@ -1,0 +1,100 @@
+<%- include('../layout/userHeader.ejs')%>
+    <div style="background: #eeeeee;">
+        <div class="container-fluid pb-5" style="padding-top: 30px;">
+            <div class="row px-xl-5">
+                <div class="col-lg-5" style="margin-bottom: 30px;">
+                    <div>
+                        <div class="p-3" style=" width: 100%; height: 492px; background: #fff;">
+                           <img src="/img/products/<%= productData[0].frontImage%>" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 h-auto" style="margin-bottom: 30px;">
+                    <div class="" style="padding: 30px; height:100%; background: #fff;">
+                        <h4 style="font-weight: 700;">
+                            <%= productData[0].name %>
+                        </h4>
+                        <div style="display: flex;">
+                            <h3 style="font-weight: 700;" class=" me-3">₹<%= productData[0].discountPrice %>
+                            </h3>
+                            <!-- <h4 style="font-weight: 700; text-decoration: line-through; color: #6C757D;" class="mb-4">₹
+                                <%= productData[0].actual_Price %>
+                            </h4> -->
+                        </div>
+                        <div class="d-flex">
+                            <span style="font-weight: 600;">Description : <p
+                                    style="color: #6C757D; height: 148px; overflow: hidden;">
+                                    <%= productData[0].description %>
+                                </p></span>
+
+                        </div>
+                        <div class="d-flex align-items-center mb-4 pt-2">
+                            <button class="btn pro-button px-3"
+                                style="color: #3D464D; background-color: #FFD333; border-color: #FFD333;"
+                                onclick="addtoWhislist('<%= productData[0]._id %>')">
+                                <i class="fa-sharp fa-solid fa-heart"></i></button>
+                            <button onclick="addToCart('<%= productData[0]._id %>','<%= productData[0].discountPrice %>')"
+                                class="btn pro-button px-3"
+                                style="color: #3D464D; background-color: #FFD333; border-color: #FFD333;">
+                                <i class="fa-sharp fa-solid fa-cart-shopping"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row px-xl-5">
+                <div class="col">
+                    <div style="background: #fff; padding: 30px;">
+                        <nav class="mb-4">
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                    aria-selected="true">Description</button>
+                                <!-- <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
+                                    aria-selected="false">Specification</button> -->
+                                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact"
+                                    aria-selected="false">Review</button>
+                            </div>
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                                aria-labelledby="nav-home-tab" tabindex="0">
+                                <h4 class="mb-3">Product Description</h4>
+                                <p style="color: #6C757D;">
+                                    <%= productData[0].description %>
+                                </p>
+                                <h4 class="mb-3">Brand</h4>
+                                <p style="color: #6C757D;">
+                                    <%= productData[0].brand %>
+                                </p>
+                                <h4 class="mb-3">Varient</h4>
+                                <p style="color: #6C757D;">
+                                    <%= productData[0].varientName %>
+                                </p>
+                                
+                            </div>
+                            <!-- <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                aria-labelledby="nav-profile-tab" tabindex="0">
+                                <h4 class="mb-3">Product Specification</h4>
+                                <p style="color: #6C757D;">
+                                    <%= productData[0].specification %>
+                                </p>
+                            </div> -->
+                            <div class="tab-pane fade" id="nav-contact" role="tabpanel"
+                                aria-labelledby="nav-contact-tab" tabindex="0">
+                                <h4 class="mb-3">Product Review</h4>
+                                <p style="color: #6C757D;">
+                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consectetur natus minima
+                                    similique et, unde dolorem nulla mollitia dolores eligendi quidem, nostrum quam ab
+                                    tempore laboriosam ratione sapiente. Doloribus, laboriosam est.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../layout/userFooter.ejs')%>

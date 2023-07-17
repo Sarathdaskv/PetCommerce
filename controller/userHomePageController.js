@@ -1,6 +1,11 @@
 const nodemailer = require("nodemailer")
 const bcrypt = require('bcrypt')
 const userModel = require('../model/userModel')
+const cartModel = require('../model/cartModel')
+const productModel = require('../model/productModel')
+const wishlistModel = require('../model/wishlistModel')
+const bannerModel = require('../model/banerModel')
+const categoryModel = require('../model/categoryModel')
 
 let OTP = `${Math.floor(10000 + Math.random() * 90000)}`;
 const sendVerifyMail = async (name, email) => {
@@ -82,7 +87,7 @@ const otpVerfication = async (req, res) => {
           password: hashedPassword,
 
         })
-        // req.session.user = user;
+        req.session.user = user;
         await userModel.insertMany([user])
         res.render('user/userLoginPage', { userData: 0, errMsg: false })
       }
@@ -123,13 +128,16 @@ const showLoginPage = async (req, res) => {
 
 const userLogin = async (req, res) => {
   try {
+    console.log("sarath");
     const checkUser = await userModel.findOne({ email: req.body.email });
+    console.log(checkUser);
     const hashedPassword = await bcrypt.compare(req.body.password, checkUser.password);
     if (checkUser && hashedPassword) {
       if (checkUser.ban) {
         res.render('user/userLoginPage', { userData: 0, errMsg: 'Sorry you are banned' })
       }
       else {
+        req.session.userLoggedIn = true;
         req.session.user = checkUser;
         res.redirect('/');
       }
@@ -251,11 +259,30 @@ const resetPassword = async (req, res) => {
 
 }
 
-const landingPage=async(req,res)=>{
-  try{
-   
+const landingPage = async (req, res) => {
+  try {
+
+    let userData = req.session.user
+    let cartCount = null;
+    let wishlistCount = null;
+    if (req.session.userLoggedIn) {
+      const cartCount = await cartModel.findById(req.session.user._id)
+      const wishlistCount = await wishlistModel.findById(req.session.user._id)
+    }
+    const banner = await bannerModel.find({ active: true });
+    const categoryList = await categoryModel.find();
+    const productList = await productModel.find({listed:true});
+    res.render('user/homePage', { 
+      userData, 
+      SliderImage: banner,
+       category: categoryList, 
+       featuredProducts: productList, 
+       cartCount, 
+       wishlistCount 
+      })
+
   }
-  catch(err){
+  catch (err) {
     console.log(err);
     res.redirect('/')
   }
@@ -273,6 +300,6 @@ module.exports = {
   getForgotPasswordOtp,
   verifyForgotPasswordOtp,
   resendForgotPasswordOtp,
-   resetPassword , 
+  resetPassword,
   landingPage,
 } 

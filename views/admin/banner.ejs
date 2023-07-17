@@ -41,10 +41,10 @@
                                     <input type="text" class="form-control" id="form-holder" placeholder="Descrpition"
                                         name="description" />
                                 </div>
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="form-holder" placeholder="URL"
+                                <!-- <div class="mb-3">
+                                    <input type="text " class="form-control" id="form-holder" placeholder="URL"
                                         name="url" />
-                                </div>
+                                </div> -->
 
                         </div>
                         <div class="modal-footer">
@@ -72,7 +72,7 @@
                                 <th style="width: 20%">Action</th>
                                 <th>Description</th>
                                 <th>Image</th>
-                                <th>URL</th>
+                                <!-- <th>URL</th> -->
 
                             </tr>
                         </thead>
@@ -105,14 +105,15 @@
                                     </td>
                                     <td>
                                         <%if(item.image){%>
-                                            <%= item.image %>
+                                            
+                                            <img src="/img/banners/<%= item.image %>" alt="" width="100px" height="80px">
                                                 <%}else{%>None<%}%>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <%if(item.url){%>
                                             <%= item.url %>
                                                 <%}else{%>None<%}%>
-                                    </td>
+                                    </td> -->
 
 
                                 </tr>

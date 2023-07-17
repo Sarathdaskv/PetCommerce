@@ -1,0 +1,31 @@
+.spinner{
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.spinner.show{
+    visibility: visible;
+}
+.spinner::after{
+    content: "";
+    width: 100px;
+    height: 100px;
+    border: 20px solid #dddddd;
+    border-top-color: #009579;
+    border-bottom-color: #009579;
+    border-radius: 50%;
+    animation: loading 1s ease infinite;
+}
+
+@keyframes loading{
+    to{
+        transform: rotate(1turn);
+    }
+}

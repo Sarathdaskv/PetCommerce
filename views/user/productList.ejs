@@ -1,0 +1,327 @@
+<%- include('../layout/userHeader.ejs')%>
+<div style="background: #eeeeee;">
+    <!-- Shop Start -->
+    <div class="container-fluid pb-5 products" style="padding-top: 30px;">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+            <div class="col-lg-3 col-md-4">
+                <form action="" id="productFilter">
+                    <!-- Price Start -->
+                    <!-- <h5 class="section-title position-relative text-uppercase mb-3"><span class="pr-3">Filter
+                            by price</span></h5>
+                    <div class="filter-box p-4" style="max-height: 300px; overflow: auto;">
+                        <div>
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" name="price_radio">
+                                <label class="form-check-label" for="price-all">All Price</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" name="price_radio">
+                                <label class="form-check-label" for="price-1">Rs.0 - Rs.100</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" name="price_radio">
+                                <label class="form-check-label" for="price-2">Rs.100 - Rs.200</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" name="price_radio">
+                                <label class="form-check-label" for="price-3">Rs.200 - Rs.300</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" class="form-check-input" name="price_radio">
+                                <label class="form-check-label" for="price-4">Rs.300 - Rs.400</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" name="price_radio">
+                                <label class="form-check-label" for="price-5">Rs.400 - Rs.500</label>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- Price End -->
+
+                    <!-- Color Start -->
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class=" pr-3">Filter
+                            by Category</span></h5>
+                    <div class="filter-box p-4" style="max-height: 300px; overflow: auto;">
+                        <div>
+                            <div class="form-check mb-2">
+                                <input type="radio" name="category_radio" class="form-check-input" id="" value="">
+                                <label class="form-check-label" for="color-1">All Category</label>
+                            </div>
+                            
+                            <% for(var i=0;i<category.length;i++) { %>
+                                <div class="form-check mb-2">
+                                    <input type="radio" name="category_radio" value="<%= category[i]._id %>" class="form-check-input" id="">
+                                    <label class="form-check-label" for="color-1">
+                                        <%= category[i].name %>
+                                    </label>
+                                </div>
+                                <% } %>
+                        </div>
+                    </div>
+                    <!-- Color End -->
+
+                </form>
+            </div>
+            <!-- Shop Sidebar End -->
+
+
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-8">
+                <!-- <div class="row pb-3">
+                    <div class="col-12 pb-1">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="ml-2">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown"
+                                        style="background: #fff;">Sorting</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">Latest</a>
+                                        <a class="dropdown-item" href="#">Popularity</a>
+                                        <a class="dropdown-item" href="#">Best Rating</a>
+                                    </div>
+                                </div>
+                                <div class="btn-group ml-2">
+                                    <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown"
+                                        style="background: #fff;">Showing</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">10</a>
+                                        <a class="dropdown-item" href="#">20</a>
+                                        <a class="dropdown-item" href="#">30</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                
+                <input type="text" value="<%= id %>" id="pid" style="display: none;">
+                <!-- Product Display -->
+                <div class="row" id="prosList">
+                </div>
+                <!-- <div class=" row col-12">
+                    <div class="loading">
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                    </div>
+                </div> -->
+                <!-- Shop Product End -->
+            </div>
+        </div>
+        <!-- Shop End -->
+    </div>
+
+    <script>
+
+       // let loading = document.querySelector('.loading')
+       
+        let limit = 5;//if changed need to changed in filtered product function in userProductController
+
+        // window.addEventListener('scroll', () => {
+        //     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        //     if (clientHeight + scrollTop >= scrollHeight - 5) {
+        //         // show loading
+        //         showloading();
+        //     }
+        // })
+
+        // function showloading() {
+        //     loading.classList.add('show');
+        //     limit = limit + limit;
+
+        //     setTimeout(getdata, 2000);
+
+        // }
+        function getdata() {            
+        let id = document.getElementById('pid').value.trim()
+            fetch('/shop/products?id=' + id + '&limit=' + limit, {
+                method: 'get',
+                headers: { 'Content-Type': 'application/json' }
+            }).then(res => res.json()).then(data => {
+                
+                if (data.length == 0) {
+                    let productsDetails = `<h2>Sorry No Products Available !</h2>`
+                    productList.innerHTML = productsDetails
+                } else {
+                    showloading();
+                    let productsDetails = ``
+                    for (values of data.products) {
+                        productsDetails +=
+                            `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
+              <div class="product-item mb-4 pb-4">
+                  <div class="product-img position-relative overflow-hidden">
+                      <img class="img-fluid w-100" src="/img/products/${values.thumbnail}" alt="">
+                  </div>
+                  <div class="text-center py-4" style="overflow: hidden;">
+                      <a class="h6 text-decoration-none product_Name "
+                          href="/product/showDetail?id=${values._id}">
+                          <p for="" style="height: 40px; overflow: hidden;">
+                              ${values.name}
+                          </p>
+                      </a>
+                      <div class="d-flex align-items-center justify-content-center mt-2">
+                          <h5 style="font-weight: bold;">Rs. ${values.discountPrice}
+                          </h5>
+                          
+                      </div>
+                      <div class="d-flex align-items-center mb-4 pt-2"
+                          style="justify-content: center;">
+                          <button class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;"
+                              onclick="addtoWhislist('${values._id}')">
+                              <i class="fa-sharp fa-solid fa-heart"></i>
+                          </button>
+                          <button
+                              onclick="addToCart('${values._id}','${values.discountPrice}')"
+                              class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;">
+                              <i class="fa-sharp fa-solid fa-cart-shopping"></i>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>`
+                    }
+                    productsDetails +=
+                        ``
+                    productList.innerHTML = productsDetails
+
+                  //  loading.classList.remove('show')
+                }
+
+            })
+        }
+
+
+
+        let productList = document.getElementById('prosList')
+        window.addEventListener("load", (event) => {
+            
+        let id = document.getElementById('pid').value.trim()
+            fetch('/shop/products?id=' + id + '&limit=' + limit, {
+                method: 'get',
+                headers: { 'Content-Type': 'application/json' }
+            }).then(res => res.json()).then(data => {
+                if (data.length == 0) {
+                    let productsDetails = `<h2>Sorry No Products Available !</h2>`
+                    productList.innerHTML = productsDetails
+                } else {
+                    let productsDetails = ``
+                    for (values of data.products) {
+                        productsDetails +=
+                            `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
+              <div class="product-item mb-4 pb-4">
+                  <div class="product-img position-relative overflow-hidden">
+                      <img class="img-fluid w-100" src="/img/products/${values.thumbnail}" alt="">
+                  </div>
+                  <div class="text-center py-4" style="overflow: hidden;">
+                      <a class="h6 text-decoration-none product_Name "
+                          href="/product/showDetail?id=${values._id}">
+                          <p for="" style="height: 40px; overflow: hidden;">
+                              ${values.name}
+                          </p>
+                      </a>
+                      <div class="d-flex align-items-center justify-content-center mt-2">
+                          <h5 style="font-weight: bold;">Rs. ${values.discountPrice}
+                          </h5>
+                        
+                      </div>
+                      <div class="d-flex align-items-center mb-4 pt-2"
+                          style="justify-content: center;">
+                          <button class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;"
+                              onclick="addtoWhislist('${values._id}')">
+                              <i class="fa-sharp fa-solid fa-heart"></i>
+                          </button>
+                          <button
+                              onclick="addToCart('${values._id}','${values.discountPrice}')"
+                              class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;">
+                              <i class="fa-sharp fa-solid fa-cart-shopping"></i>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>`
+                    }
+                    productsDetails +=
+                        ``
+                    productList.innerHTML = productsDetails
+                    //loading.classList.remove('show')
+                }
+
+
+            })
+        })
+
+
+        // Filter
+        let filter = document.getElementById('productFilter')
+
+        filter.addEventListener('change', (e) => {
+            e.preventDefault();
+            const formData = new FormData(filter);
+
+            //Converting the data to Json object
+            const data = Object.fromEntries(formData)
+            fetch('/products/filter',{
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({categoryID:data.category_radio,limit})
+            }).then(res => res.json()).then(result => {
+               // console.log(result);
+                const data = result.products
+                const categoryID = result.category
+               // console.log(data.products);
+                if (data.length == 0) {
+                    let productsDetails = `<h2>Sorry No Products Available !</h2>`
+                    productList.innerHTML = productsDetails
+                } else {
+                    let productsDetails = ``
+                    for (values of data) {
+                        productsDetails +=
+                            `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
+              <div class="product-item mb-4 pb-4">
+                  <div class="product-img position-relative overflow-hidden">
+                      <img class="img-fluid w-100" src="/img/products/${values.thumbnail}" alt="">
+                  </div>
+                  <div class="text-center py-4" style="overflow: hidden;">
+                      <a class="h6 text-decoration-none product_Name "
+                          href="/product/showDetail?id=${values._id}">
+                          <p for="" style="height: 40px; overflow: hidden;">
+                              ${values.name}
+                          </p>
+                      </a>
+                      <div class="d-flex align-items-center justify-content-center mt-2">
+                          <h5 style="font-weight: bold;">Rs. ${values.discountPrice}
+                          </h5>
+                       
+                      </div>
+                      <div class="d-flex align-items-center mb-4 pt-2"
+                          style="justify-content: center;">
+                          <button class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;"
+                              onclick="addtoWhislist('${values._id}')">
+                              <i class="fa-sharp fa-solid fa-heart"></i>
+                          </button>
+                          <button
+                              onclick="addToCart('${values._id}','${values.discountPrice}')"
+                              class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;">
+                              <i class="fa-sharp fa-solid fa-cart-shopping"></i>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>`
+                    }
+                    productsDetails +=
+                        ``
+                    productList.innerHTML = productsDetails
+                    document.getElementById('pid').value = categoryID
+                }
+            })
+        })
+    </script>
+        <%- include('../layout/userFooter.ejs')%>

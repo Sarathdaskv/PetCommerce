@@ -1,5 +1,6 @@
 const sharp = require('sharp')
 const bannerModel = require('../model/banerModel')
+const path = require('path')
 
 const viewBanners = async (req, res) => {
 
@@ -19,6 +20,7 @@ const viewBanners = async (req, res) => {
 
 const addNewBanners = async (req, res) => {
     try {
+
         if (req.file) {
             let bannerImage = `${req.body.title}_${Date.now()}.png`;
             sharp(req.file.buffer)
@@ -28,8 +30,15 @@ const addNewBanners = async (req, res) => {
 
             req.body.image = bannerImage;
         }
-        const newBanner = new bannerModel(req.body);
-        newBanner.save();
+
+      
+
+        const newBanner = new bannerModel({
+            title: req.body.title,
+            image: req.body.image,
+            description: req.body.description,
+        });
+        await bannerModel.insertMany([newBanner])
         res.redirect("/admin/bannerManagement");
     }
     catch (err) {
@@ -40,10 +49,10 @@ const addNewBanners = async (req, res) => {
 
 const changeBannerActivity = async (req, res) => {
     try {
-       
+
         let newActivity = req.body.currentActivity === "true";
         newActivity = !newActivity;
-        
+
         await bannerModel.findByIdAndUpdate(req.body.bannerId, {
             $set: {
                 active: newActivity,
@@ -65,15 +74,15 @@ const changeBannerActivity = async (req, res) => {
 const deleteBanner = async (req, res) => {
     try {
         console.log("sarath");
-      await bannerModel.findByIdAndDelete(req.body.bannerId);
-      res.json({
-        data:'success'
-    })
+        await bannerModel.findByIdAndDelete(req.body.bannerId);
+        res.json({
+            data: 'success'
+        })
     } catch (err) {
         console.log(err);
         res.redirect('/admin/dashboard')
     }
-  };
+};
 
 
-module.exports = { viewBanners, addNewBanners, changeBannerActivity,deleteBanner }
+module.exports = { viewBanners, addNewBanners, changeBannerActivity, deleteBanner }

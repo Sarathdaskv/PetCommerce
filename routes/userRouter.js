@@ -1,12 +1,19 @@
 const express=require('express');
 const userHomePageController=require('../controller/userHomePageController')
+const userProductController=require('../controller/userProductController')
+const userCartController=require('../controller/userCartController')
+const userSession=require('../middleware/userSession')
 const router=express.Router();
 
+
+router
+.route('/')
+.get(userHomePageController.landingPage)
 
 
 router
 .route('/userLogin') 
-.get(userHomePageController.showLoginPage)
+.get(userSession.userLoginSession,userHomePageController.showLoginPage)
 .post(userHomePageController.userLogin)
  
 router 
@@ -50,10 +57,31 @@ router
 .route('/resetPassword')
 .post(userHomePageController.resetPassword)
 
-
+router
+.route('/shop')
+.get(userProductController.getCategoryProducts)
 
 router
-.route('/')
-.get(userHomePageController.landingPage)
+.route('/shop/products')
+.get(userProductController.showAllProducts)
+
+router
+.route('/products/filter')
+.post(userProductController.filteredProducts)
+
+router
+.route('/showProducts')
+.get(userProductController.viewMore)
+
+router.route('/product/showDetail')
+.get(userProductController.showProductDetails)
+
+
+router.route('/cart')
+.get(userSession.userLoginSession,userCartController.showCart)
+
+router
+.route('/product/addToCart')
+.post(userSession.userLoginSession,userCartController.addToCart)
 
 module.exports=router; 
