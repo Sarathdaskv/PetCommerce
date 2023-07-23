@@ -6,6 +6,7 @@ const productModel = require('../model/productModel')
 const wishlistModel = require('../model/wishlistModel')
 const bannerModel = require('../model/banerModel')
 const categoryModel = require('../model/categoryModel')
+const { default: mongoose } = require('mongoose');
 
 let OTP = `${Math.floor(10000 + Math.random() * 90000)}`;
 const sendVerifyMail = async (name, email) => {
@@ -90,6 +91,22 @@ const otpVerfication = async (req, res) => {
         req.session.user = user;
         await userModel.insertMany([user])
         res.render('user/userLoginPage', { userData: 0, errMsg: false })
+
+        const newCart = await cartModel({
+          customer: new mongoose.Types.ObjectId(user._id),
+        });
+        await userModel.findByIdAndUpdate(user._id, {
+          $set: { cart: new mongoose.Types.ObjectId(newCart._id) },
+        });
+        await newCart.save();
+        const newWishlist = await wishlistModel({
+          customer: new mongoose.Types.ObjectId(user._id),
+        });
+        await userModel.findByIdAndUpdate(user._id, {
+          $set: { wishlist: new mongoose.Types.ObjectId(newWishlist._id) },
+        });
+        await newWishlist.save();
+        console.log("cart and whislist created");
       }
       else {
         res.render('user/OtpVerification', { userId: 0, errMsg: 'invalid OTP,kindly wait' })
@@ -128,9 +145,8 @@ const showLoginPage = async (req, res) => {
 
 const userLogin = async (req, res) => {
   try {
-    console.log("sarath");
+
     const checkUser = await userModel.findOne({ email: req.body.email });
-    console.log(checkUser);
     const hashedPassword = await bcrypt.compare(req.body.password, checkUser.password);
     if (checkUser && hashedPassword) {
       if (checkUser.ban) {
@@ -138,11 +154,11 @@ const userLogin = async (req, res) => {
       }
       else {
         req.session.userLoggedIn = true;
-        req.session.user = checkUser;
+        req.session.user = checkUser; 
         res.redirect('/');
       }
-    }
-    else {
+    } 
+    else { 
       res.render('user/userLoginPage', { userData: 0, errMsg: 'invalid credentials' })
     }
   }
@@ -265,21 +281,37 @@ const landingPage = async (req, res) => {
     let userData = req.session.user
     let cartCount = null;
     let wishlistCount = null;
+    let cart=0;
+      let wishlist = 0;
     if (req.session.userLoggedIn) {
-      const cartCount = await cartModel.findById(req.session.user._id)
-      const wishlistCount = await wishlistModel.findById(req.session.user._id)
+      cartCount = await cartModel.find({customer:userData._id})
+        cart=cartCount[0].totalQuantity;
+        wishlistCount = await wishlistModel.aggregate([
+          {
+            $group: {
+              _id: null,
+              totalSize: {
+                $sum: {
+                  $size: "$products"
+                }
+              }
+            }
+          }
+        ])
+        wishlist = parseInt(wishlistCount[0].totalSize);
+      
     }
     const banner = await bannerModel.find({ active: true });
     const categoryList = await categoryModel.find();
-    const productList = await productModel.find({listed:true});
-    res.render('user/homePage', { 
-      userData, 
+    const productList = await productModel.find({ listed: true });
+    res.render('user/homePage', {
+      userData,
       SliderImage: banner,
-       category: categoryList, 
-       featuredProducts: productList, 
-       cartCount, 
-       wishlistCount 
-      })
+      category: categoryList,
+      featuredProducts: productList,
+      cartCount:cart,
+      wishlistCount:wishlist
+    })
 
   }
   catch (err) {

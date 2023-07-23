@@ -28,7 +28,6 @@ const adminUserData= new mongoose.Schema({
       address:{
         type:Array,
         default:[],
-        
       },
       wishlist:[{type:mongoose.Schema.Types.ObjectId, ref:"Wishlist"}],
       cart:[{type:mongoose.Schema.Types.ObjectId, ref:"Cart"}],

@@ -184,37 +184,98 @@ function adminLoginValidation() {
         document.getElementById('passwordError').innerHTML = ""
     }
     if (error == 1) {
-        return false
-
+        return false  
+ 
     }
     else {
-        return true;
+        return true;    
     }
 
 }
 
 function addToCart(productId, price) {
-
-    $.ajax({
+    let count = $('#cartCount').html()
+    let wishCount=$('#whishlistCount').html()
+    $.ajax({ 
         url: '/product/addToCart',
         type: 'post',
         data: {
             price:price,
-            productId:productId
+            productId:productId,
         },
         success: (response)=>{
-            console.log(response);
-            if(response.status){
-                let count = $('#cartCount').html()
+            if(response.status=="addedToCart"){
                 count = parseInt(count)+1
                 $("#cartCount").html(count)
+                if(wishCount>0){
+                    wishCount = parseInt(wishCount)-1
+                    $("#whishlistCount").html(wishCount)
+                }
                 Swal.fire({
-                    position: 'center',
+                    position: 'top-right',
                     icon: 'success',
                     title: 'product has been added to cart',
                     showConfirmButton: false,
                     timer: 1500
                 })
+                $(".content").load(location.href + " .content");
+              
+            }
+            else if(response.status=="countAdded"){ 
+                count = parseInt(count)+1
+                $("#cartCount").html(count)
+                if(wishCount>0){
+                    wishCount = parseInt(wishCount)-1
+                    $("#whishlistCount").html(wishCount)
+                }
+                Swal.fire({
+                    position: 'top-right',
+                    icon: 'success',
+                    title: 'product count added',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                $(".content").load(location.href + " .content");
+                
+            }
+            else{
+                location.href='/userLogin'
+            }
+        } 
+    })
+}
+
+
+function addtoWhislist(productId){
+    let count = $('#whishlistCount').html()
+    $.ajax({
+        url:'/wishlist',
+        data: {productId:productId},
+        method: 'post',
+        success: (response)=>{
+            console.log(response);
+            if(response.status==true){
+              
+                count = parseInt(count)+1
+                $("#whishlistCount").html(count)
+                Swal.fire({ 
+                    position: 'top-right',
+                    icon: 'success',
+                    title: 'product has been added to wishlist', 
+                    showConfirmButton: false,
+                    timer: 1500 
+                }) 
+            } 
+            else if(response.status=="alreadyExists"){
+                Swal.fire({ 
+                    position: 'top-right',
+                    icon: 'success',
+                    title: 'product exists in  your wishlist', 
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }else{
+                location.href='/userLogin' 
             }
         }
     })

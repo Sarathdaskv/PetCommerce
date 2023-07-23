@@ -1,13 +1,15 @@
 <%- include('../layout/userHeader.ejs')%>
-<div style="background: #eeeeee;">
-    <!-- Shop Start -->
-    <div class="container-fluid pb-5 products" style="padding-top: 30px;">
-        <div class="row px-xl-5">
-            <!-- Shop Sidebar Start -->
-            <div class="col-lg-3 col-md-4">
-                <form action="" id="productFilter">
-                    <!-- Price Start -->
-                    <!-- <h5 class="section-title position-relative text-uppercase mb-3"><span class="pr-3">Filter
+
+
+    <div style="background: #eeeeee;">
+        <!-- Shop Start -->
+        <div class="container-fluid pb-5 products" style="padding-top: 30px;">
+            <div class="row px-xl-5">
+                <!-- Shop Sidebar Start -->
+                <div class="col-lg-3 col-md-4">
+                    <form action="" id="productFilter">
+                        <!-- Price Start -->
+                        <!-- <h5 class="section-title position-relative text-uppercase mb-3"><span class="pr-3">Filter
                             by price</span></h5>
                     <div class="filter-box p-4" style="max-height: 300px; overflow: auto;">
                         <div>
@@ -37,38 +39,77 @@
                             </div>
                         </div>
                     </div> -->
-                    <!-- Price End -->
+                        <!-- Price End -->
 
-                    <!-- Color Start -->
-                    <h5 class="section-title position-relative text-uppercase mb-3"><span class=" pr-3">Filter
-                            by Category</span></h5>
-                    <div class="filter-box p-4" style="max-height: 300px; overflow: auto;">
-                        <div>
-                            <div class="form-check mb-2">
-                                <input type="radio" name="category_radio" class="form-check-input" id="" value="">
-                                <label class="form-check-label" for="color-1">All Category</label>
+                        <!-- Color Start -->
+
+                        <!-- <div class="input-group">
+                            <div class="form-outline">
+                                <input type="search" id="form1" class="form-control" placeholder="Search"
+                                    id="searchInput" />
+
                             </div>
-                            
-                            <% for(var i=0;i<category.length;i++) { %>
-                                <div class="form-check mb-2">
-                                    <input type="radio" name="category_radio" value="<%= category[i]._id %>" class="form-check-input" id="">
-                                    <label class="form-check-label" for="color-1">
-                                        <%= category[i].name %>
-                                    </label>
-                                </div>
-                                <% } %>
+                            <button type="button" class="btn btn-primary" style="height: fit-content;"
+                                onkeyup="search()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <span class="input-group-text" id="searchButton"><button class="btn bg-transparent btn-sm"
+                                    style="font-size: 0.75rem" onclick="removeFilter('none')">
+                                    All Products<br /></button></span>
+                        </div> -->
+
+                        <div class="container " id="searchList">
+
+                            <div class="input-group flex-nowrap my-2 " style="width: 250px">
+                                <input type="text" class="form-control" placeholder="Search" id="searchInput" />
+                                <button type="button" class="btn btn-primary" style="height: fit-content;"
+                                    onclick="search()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <!-- <span class="input-group-text" id="searchButton"><button
+                                            class="btn bg-transparent btn-sm" style="font-size: 0.75rem"
+                                            onclick="removeFilter('none')">
+                                            All Products<br /></button></span> -->
+                            </div>
+
                         </div>
-                    </div>
-                    <!-- Color End -->
-
-                </form>
-            </div>
-            <!-- Shop Sidebar End -->
 
 
-            <!-- Shop Product Start -->
-            <div class="col-lg-9 col-md-8">
-                <!-- <div class="row pb-3">
+                        <br>
+
+
+                        <h5 class="section-title position-relative text-uppercase mb-3"><span class=" pr-3">Filter
+                                by Category</span></h5>
+                        <div class="filter-box p-4" style="max-height: 300px; overflow: auto;">
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input type="radio" name="category_radio" class="form-check-input" id="" value="">
+                                    <label class="form-check-label" for="color-1">All Category</label>
+                                </div>
+
+                                <% for(var i=0;i<category.length;i++) { %>
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="category_radio" value="<%= category[i]._id %>"
+                                            class="form-check-input" id="">
+                                        <label class="form-check-label" for="color-1">
+                                            <%= category[i].name %>
+                                        </label>
+                                    </div>
+                                    <% } %>
+                            </div>
+                        </div>
+                        <!-- Color End -->
+
+
+                    </form>
+                </div>
+                <!-- Shop Sidebar End -->
+
+
+
+                <!-- Shop Product Start -->
+                <div class="col-lg-9 col-md-8">
+                    <!-- <div class="row pb-3">
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <div class="ml-2">
@@ -94,61 +135,61 @@
                         </div>
                     </div>
                 </div> -->
-                
-                <input type="text" value="<%= id %>" id="pid" style="display: none;">
-                <!-- Product Display -->
-                <div class="row" id="prosList">
-                </div>
-                <!-- <div class=" row col-12">
+
+                    <input type="text" value="<%= id %>" id="pid" style="display: none;">
+                    <!-- Product Display -->
+                    <div class="row" id="prosList">
+                    </div>
+                    <!-- <div class=" row col-12">
                     <div class="loading">
                         <div class="ball"></div>
                         <div class="ball"></div>
                         <div class="ball"></div>
                     </div>
                 </div> -->
-                <!-- Shop Product End -->
+                    <!-- Shop Product End -->
+                </div>
             </div>
+            <!-- Shop End -->
         </div>
-        <!-- Shop End -->
-    </div>
 
-    <script>
+        <script>
 
-       // let loading = document.querySelector('.loading')
-       
-        let limit = 5;//if changed need to changed in filtered product function in userProductController
+            // let loading = document.querySelector('.loading')
 
-        // window.addEventListener('scroll', () => {
-        //     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-        //     if (clientHeight + scrollTop >= scrollHeight - 5) {
-        //         // show loading
-        //         showloading();
-        //     }
-        // })
+            let limit = 5;//if changed need to changed in filtered product function in userProductController
 
-        // function showloading() {
-        //     loading.classList.add('show');
-        //     limit = limit + limit;
+            // window.addEventListener('scroll', () => {
+            //     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            //     if (clientHeight + scrollTop >= scrollHeight - 5) {
+            //         // show loading
+            //         showloading();
+            //     }
+            // })
 
-        //     setTimeout(getdata, 2000);
+            // function showloading() {
+            //     loading.classList.add('show');
+            //     limit = limit + limit;
 
-        // }
-        function getdata() {            
-        let id = document.getElementById('pid').value.trim()
-            fetch('/shop/products?id=' + id + '&limit=' + limit, {
-                method: 'get',
-                headers: { 'Content-Type': 'application/json' }
-            }).then(res => res.json()).then(data => {
-                
-                if (data.length == 0) {
-                    let productsDetails = `<h2>Sorry No Products Available !</h2>`
-                    productList.innerHTML = productsDetails
-                } else {
-                    showloading();
-                    let productsDetails = ``
-                    for (values of data.products) {
-                        productsDetails +=
-                            `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
+            //     setTimeout(getdata, 2000);
+
+            // }
+            function getdata() {
+                let id = document.getElementById('pid').value.trim()
+                fetch('/shop/products?id=' + id + '&limit=' + limit, {
+                    method: 'get',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(res => res.json()).then(data => {
+
+                    if (data.length == 0) {
+                        let productsDetails = `<h2>Sorry No Products Available !</h2>`
+                        productList.innerHTML = productsDetails
+                    } else {
+                        showloading();
+                        let productsDetails = ``
+                        for (values of data.products) {
+                            productsDetails +=
+                                `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
               <div class="product-item mb-4 pb-4">
                   <div class="product-img position-relative overflow-hidden">
                       <img class="img-fluid w-100" src="/img/products/${values.thumbnail}" alt="">
@@ -182,35 +223,35 @@
                   </div>
               </div>
           </div>`
-                    }
-                    productsDetails +=
-                        ``
-                    productList.innerHTML = productsDetails
-
-                  //  loading.classList.remove('show')
-                }
-
-            })
-        }
-
-
-
-        let productList = document.getElementById('prosList')
-        window.addEventListener("load", (event) => {
-            
-        let id = document.getElementById('pid').value.trim()
-            fetch('/shop/products?id=' + id + '&limit=' + limit, {
-                method: 'get',
-                headers: { 'Content-Type': 'application/json' }
-            }).then(res => res.json()).then(data => {
-                if (data.length == 0) {
-                    let productsDetails = `<h2>Sorry No Products Available !</h2>`
-                    productList.innerHTML = productsDetails
-                } else {
-                    let productsDetails = ``
-                    for (values of data.products) {
+                        }
                         productsDetails +=
-                            `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
+                            ``
+                        productList.innerHTML = productsDetails
+
+                        //  loading.classList.remove('show')
+                    }
+
+                })
+            }
+
+
+
+            let productList = document.getElementById('prosList')
+            window.addEventListener("load", (event) => {
+
+                let id = document.getElementById('pid').value.trim()
+                fetch('/shop/products?id=' + id + '&limit=' + limit, {
+                    method: 'get',
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(res => res.json()).then(data => {
+                    if (data.length == 0) {
+                        let productsDetails = `<h2>Sorry No Products Available !</h2>`
+                        productList.innerHTML = productsDetails
+                    } else {
+                        let productsDetails = ``
+                        for (values of data.products) {
+                            productsDetails +=
+                                `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
               <div class="product-item mb-4 pb-4">
                   <div class="product-img position-relative overflow-hidden">
                       <img class="img-fluid w-100" src="/img/products/${values.thumbnail}" alt="">
@@ -244,44 +285,56 @@
                   </div>
               </div>
           </div>`
-                    }
-                    productsDetails +=
-                        ``
-                    productList.innerHTML = productsDetails
-                    //loading.classList.remove('show')
-                }
-
-
-            })
-        })
-
-
-        // Filter
-        let filter = document.getElementById('productFilter')
-
-        filter.addEventListener('change', (e) => {
-            e.preventDefault();
-            const formData = new FormData(filter);
-
-            //Converting the data to Json object
-            const data = Object.fromEntries(formData)
-            fetch('/products/filter',{
-                method: 'POST',
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify({categoryID:data.category_radio,limit})
-            }).then(res => res.json()).then(result => {
-               // console.log(result);
-                const data = result.products
-                const categoryID = result.category
-               // console.log(data.products);
-                if (data.length == 0) {
-                    let productsDetails = `<h2>Sorry No Products Available !</h2>`
-                    productList.innerHTML = productsDetails
-                } else {
-                    let productsDetails = ``
-                    for (values of data) {
+                        }
                         productsDetails +=
-                            `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
+                            ``
+                        productList.innerHTML = productsDetails
+                        //loading.classList.remove('show')
+                    }
+
+
+                })
+            })
+
+
+            // let search = document.getElementById('searchInput')
+            // search.addEventListener('keyup', (e) => {
+            //     e.preventDefault();
+            //     const data = Object.fromEntries(search)
+            //     fetch('/searchProducts',{
+            //         method: 'POST',
+            //         headers: { 'Content-Type': 'application/json' },
+            //         body: JSON.stringify({  })
+            //     })
+            // })
+
+
+            // Filter
+            let filter = document.getElementById('productFilter')
+
+            filter.addEventListener('change', (e) => {
+                e.preventDefault();
+                const formData = new FormData(filter);
+
+                //Converting the data to Json object
+                const data = Object.fromEntries(formData)
+                fetch('/products/filter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ categoryID: data.category_radio, limit })
+                }).then(res => res.json()).then(result => {
+                    // console.log(result);
+                    const data = result.products
+                    const categoryID = result.category
+                    // console.log(data.products);
+                    if (data.length == 0) {
+                        let productsDetails = `<h2>Sorry No Products Available !</h2>`
+                        productList.innerHTML = productsDetails
+                    } else {
+                        let productsDetails = ``
+                        for (values of data) {
+                            productsDetails +=
+                                `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
               <div class="product-item mb-4 pb-4">
                   <div class="product-img position-relative overflow-hidden">
                       <img class="img-fluid w-100" src="/img/products/${values.thumbnail}" alt="">
@@ -315,13 +368,94 @@
                   </div>
               </div>
           </div>`
+                        }
+                        productsDetails +=
+                            ``
+                        productList.innerHTML = productsDetails
+                        document.getElementById('pid').value = categoryID
                     }
-                    productsDetails +=
-                        ``
-                    productList.innerHTML = productsDetails
-                    document.getElementById('pid').value = categoryID
-                }
+                })
             })
-        })
-    </script>
+
+
+
+            function search() {
+                var searchInput = $("#searchInput").val();
+                // if (searchInput) {
+                //   $("#searchButton").html(
+                //     `<button class="btn btn-sm" onclick="filter('none')" >Remove Filter</button>`
+                //   );
+                // }
+                $.ajax({
+                    url: "/searchProducts",
+                    method: "put",
+                    data: { searchInput: searchInput },
+                    success: (res) => {
+                       // let result=res.json()
+                       // console.log(result);
+                        const data = res
+                        console.log(res)
+                        if (data.length == 0) {
+                        let productsDetails = `<h2>Sorry No Products Available !</h2>`
+                        productList.innerHTML = productsDetails
+                    }else {
+                        let productsDetails = ``
+                        for (values of data.products) {
+                            productsDetails +=
+                                `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
+              <div class="product-item mb-4 pb-4">
+                  <div class="product-img position-relative overflow-hidden">
+                      <img class="img-fluid w-100" src="/img/products/${values.thumbnail}" alt="">
+                  </div>
+                  <div class="text-center py-4" style="overflow: hidden;">
+                      <a class="h6 text-decoration-none product_Name "
+                          href="/product/showDetail?id=${values._id}">
+                          <p for="" style="height: 40px; overflow: hidden;">
+                              ${values.name}
+                          </p>
+                      </a>
+                      <div class="d-flex align-items-center justify-content-center mt-2">
+                          <h5 style="font-weight: bold;">Rs. ${values.discountPrice}
+                          </h5>
+                       
+                      </div>
+                      <div class="d-flex align-items-center mb-4 pt-2"
+                          style="justify-content: center;">
+                          <button class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;"
+                              onclick="addtoWhislist('${values._id}')">
+                              <i class="fa-sharp fa-solid fa-heart"></i>
+                          </button>
+                          <button
+                              onclick="addToCart('${values._id}','${values.discountPrice}')"
+                              class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;">
+                              <i class="fa-sharp fa-solid fa-cart-shopping"></i>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>`
+                        }
+                        productsDetails +=
+                            ``
+                        productList.innerHTML = productsDetails
+                      // document.getElementById('pid').value = categoryID
+                    }
+                    },
+                });
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+        </script>
         <%- include('../layout/userFooter.ejs')%>

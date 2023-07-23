@@ -1,0 +1,89 @@
+<%- include('../layout/userHeader.ejs')%>
+
+    <div style="background: #eeeeee; "  >
+        <div class="container-fluid user-order pb-5" style="padding-top: 30px;">
+            <div class="wishlist">
+                <div>
+                    <div class="wishlist-title">
+                        <div class="title">
+                            <span>My WishList (<span>
+                                    <%= wishlistCount %>
+                                </span>)</span>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <% wishList.products.forEach((item,i)=> { %>
+                            <div class="content-item">
+                                <div class="d-flex">
+                                    <div class="col-11">
+
+                                        <a href="/product/showDetail?id=<%= item._id %>">
+                                            <div class="d-flex">
+                                                <div class="image">
+                                                    <img src="/img/products/<%= item.thumbnail %>" alt="">
+                                                </div>
+                                                <div class="product">
+                                                    <p class="product-Name">
+                                                        <%= item.name %>
+                                                    </p>
+                                                    <p class="product-Rate">
+                                                        <span class="s-rate">Rs.
+                                                            <%=item.discountPrice %>
+                                                        </span>
+                                                        <!-- <span class="a-rate">Rs.
+                                                            <%= item.name.actual_Price %>
+                                                        </span> -->
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                    </div>
+                                    <form action="/ideas/{{idea.id}}?_method=PUT" method="post"></form>
+                                   
+
+                                    <div class="col-3">
+                                        <button class="btn" onclick="addToCart('<%=item._id  %>','<%=item.discountPrice  %>')">
+                                            <i class="fa-solid fa-cart-plus"></i></button>
+                                        <button class="btn" onclick="wishlistProDelete('<%=item._id  %>')"><i
+                                                class="fa-sharp fa-solid fa-trash"></i></button>
+                                                
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+        function wishlistProDelete(id) {
+            Swal.fire({
+                title: 'Do you want to delete?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(val => {
+                if (val) {
+                    fetch('/wishlist', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({  id })
+                    }).then(res => res.json()).then(data => {
+                       
+                        location.reload()
+                    })
+
+                }
+            })
+        }
+    </script>
+
+    <%- include('../layout/userFooter.ejs')%>

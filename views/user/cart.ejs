@@ -1,0 +1,251 @@
+<%- include('../layout/userHeader.ejs')%>
+    <div style="background: #eeeeee;">
+        <div class="container-fluid pb-5" style="padding-top: 30px;">
+            <div class="row px-xl-5">
+                <div class="col-lg-8 mb-3" style="display: block;  overflow-x: auto;">
+                    <table class="table table-hover text-center" style="background-color: #fff;">
+                        <thead style="background-color: #3D464D; color: #fff;">
+                            <tr style="border-bottom: 15px solid #f5f5f5;">
+                                <th>Products</th>
+                                <th>Price</th>
+                                <th>Quanity</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="align-middle">
+                            <% if(cartProducts!=null && cartProducts.products.length!=0){ %>
+
+                                <% cartProducts.products.forEach((product,i)=> { %>
+                                    <tr style="border-bottom: 15px solid #f5f5f5;">
+                                        <td>
+                                            <img src="/img/products/<%= product.name.thumbnail %>" alt="Sorry"
+                                                width="50px">
+                                            <a href="" style="text-decoration: none; color: #6C757D;">
+                                                <%= product.name.name %>
+                                            </a>
+                                        </td>
+                                        <td>₹<%= product.name.discountPrice %>
+                                        </td>
+                                        <td>
+                                            <div class="mx-auto d-flex" style="width: 100px;">
+                                                <div>
+                                                    <button class="btn"
+                                                        style="background: #FFD333; border-radius: 0;padding: 0.35rem 0.5rem; font-size: 0.875rem;"
+                                                        onclick="changeQuantityMinus('<%= cartProducts._id%>','<%= product.name._id %>',-1,'<%= userData._id %>','<%= product.name.discountPrice %>','<%= product.price %>')">
+                                                        <i class="las la-minus"></i>
+                                                    </button>
+                                                </div>
+                                                <span id="<%= product.name._id %>"
+                                                    style="width: 1%; flex: 1 1 auto; background: #f5f5f5; border: 0; padding: 0 5px;"
+                                                    class="pt-1">
+                                                    <%= product.quantity %>
+                                                </span>
+                                                <div>
+                                                    <button class="btn"
+                                                        style="background: #FFD333; border-radius: 0;padding: 0.35rem 0.5rem; font-size: 0.875rem;"
+                                                        onclick="changeQuantityAdd('<%= cartProducts._id%>','<%= product.name._id %>',1,'<%= userData._id %>','<%= product.name.discountPrice %>','<%= product.price %>')">
+                                                        <i class="las la-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td id="<%= product.price %>">₹<%= product.price %>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-danger"
+                                                style="padding: 0.35rem 0.5rem; font-size: 0.875rem;"
+                                                onclick="removeFromCart('<%=product.name._id%>')">
+                                                <i class="las la-times"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <tr style="border-bottom: 15px solid #f5f5f5;">
+                                                <td>
+                                                    <h1>Cart is Empty</h1>
+                                                </td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Coupon -->
+                    <h5 class="mb-3 text-uppercase" style="line-height: 1.2;">Apply Coupon</h5>
+                    <div class="bg-light mb-5" style="padding: 30px;">
+                        <div class="" style="border-bottom: 1px solid #dee2e6">
+                            <div class="d-flex justify-content-between mb-3">
+                                <input type="text" class="form-control me-4" id="coupon_Code"
+                                    style="text-transform: uppercase;">
+                                <button class="btn btn-warning ps-4 pe-4" onclick="applyCoupon()">APPLY</button>
+                            </div>
+                            <div id="message"></div>
+                        </div>
+
+                    </div>
+
+                    <h5 class="mb-3 text-uppercase" style="line-height: 1.2;">Cart Summary</h5>
+                    <div class="bg-light mb-5" style="padding: 30px;">
+                        <div class="pb-2" style="border-bottom: 1px solid #dee2e6">
+                            <div class="d-flex justify-content-between mb-3">
+                                <h6>Sub Total</h6>
+                                <h6 id="subTotal" class="totalAmount">
+                                    <%=cartProducts.totalPrice %>
+                                </h6>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <h6>Discount</h6>
+                                <h6 id="discount" class="totalAmount">0</h6>
+                            </div>
+                        </div>
+                        <div class="pt-2">
+                            <div class="d-flex justify-content-between mt-2">
+                                <h4 style="font-weight: 600;">Total</h4>
+                                <h4 id="totalAmount" class="totalAmount" style="font-weight: 600;">
+                                    <%=cartProducts.totalPrice %>
+                                </h4>
+                            </div>
+                            <% if (cartProducts.totalPrice>0 ){ %>
+                                <button
+                                    style="font-weight: 700; width: 100%; color: #3D464D; background: #FFD333; border: 0;"
+                                    class="my-3 py-3 btn" onclick="ProceedToPayment()">Procced to Checkout</button>
+                                <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function removeFromCart(productId) {
+            $.ajax({
+                url: "/cart",
+                method: "delete",
+                data: {
+                    id: productId,
+                },
+                success:(res)=>{
+                    if(res.success=="removed"){
+                        location.reload();
+                    }
+                    
+                }
+            })
+        }
+
+
+        function changeQuantityMinus(cartID, productID, count, userID, price, total) {
+            let quantity = parseInt(document.getElementById(productID).innerHTML)
+            document.getElementById('discount').innerHTML = 0
+            $.ajax({
+                url: '/cart/changeProductQuanity',
+                data: {
+                    cart: cartID,
+                    product: productID,
+                    count: count,
+                    quantity: quantity,
+                    userID: userID,
+                    price: price
+                },
+                method: 'delete',
+                success: (response) => {
+                    
+                    if (response.removedProduct) {
+                        location.reload();
+                    }
+                    else {
+                        let counttt = document.getElementById(productID).innerHTML = quantity + count
+                        document.getElementById(total).innerHTML = '₹' + counttt * price
+                        document.getElementById("subTotal").innerHTML = response.userCart.totalPrice
+                        document.getElementById('discount').innerHTML = 0
+                        document.getElementById("totalAmount").innerHTML = response.userCart.totalPrice
+                        document.getElementById('coupon_Code').value = ""
+                        document.getElementById('message').innerHTML = ""
+                    }
+                }
+
+            })
+        }
+
+        function changeQuantityAdd(cartID, productID, count, userID, price, total) {
+            let quantity = parseInt(document.getElementById(productID).innerHTML)
+            document.getElementById('discount').innerHTML = 0
+            $.ajax({
+                url: '/cart/changeProductQuanity',
+                data: {
+                    cart: cartID,
+                    product: productID,
+                    count: count,
+                    quantity: quantity,
+                    userID: userID,
+                    price: price
+                },
+                method: 'put',
+                success: (response) => {
+
+                   
+                    let counttt = document.getElementById(productID).innerHTML = quantity + count
+                    document.getElementById(total).innerHTML = '₹' + counttt * parseInt(price)
+                    document.getElementById("subTotal").innerHTML = response.userCart.totalPrice
+                    document.getElementById('discount').innerHTML = 0
+                    document.getElementById("totalAmount").innerHTML = response.userCart.totalPrice
+                    document.getElementById('coupon_Code').value = ""
+                    document.getElementById('message').innerHTML = ""
+
+                }
+            })
+        }
+
+        // Coupon Apply
+        function applyCoupon() {
+            let code = document.getElementById('coupon_Code').value.toUpperCase()
+            let messageCoupon = document.getElementById('message');
+            fetch('/cart/applyCoupon', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code })
+            }).then(res => res.json()).then(data => {
+                let cartTotalAmount = data.totalAmount
+                if (data.noCoupon) {
+                    let message = `<span style="color: red;"><i class="las la-times"></i>Invalid Coupon Code</span>`
+                    messageCoupon.innerHTML = message
+                } else if (data.expiry) {
+                    let message = `<span style="color: red;"><i class="las la-times"></i>Coupon Expired</span>`
+                    messageCoupon.innerHTML = message
+                } else if (data.amountExceed) {
+                    let message = `<span style="color: red;"><i class="las la-times"></i>Amount Low</span>`
+                    messageCoupon.innerHTML = message
+                } else if (data.flatDiscount) {
+                    document.getElementById('discount').innerHTML = data.discount
+                    document.getElementById('totalAmount').innerHTML = cartTotalAmount - data.discount
+                    let message = `<span style="color: green;"><i class="las la-check"></i>Coupon valid</span>`
+                    messageCoupon.innerHTML = message
+                } else {
+                    let discounted = document.getElementById('discount').innerHTML = (cartTotalAmount * data.discount) / 100
+                    document.getElementById('totalAmount').innerHTML = cartTotalAmount - discounted
+                    let message = `<span style="color: green;"><i class="las la-check"></i>Coupon valid</span>`
+                    messageCoupon.innerHTML = message
+                }
+            })
+
+        }
+
+        function ProceedToPayment() {
+            let discountAmount = document.getElementById('discount').innerHTML
+            let couponCode = document.getElementById('coupon_Code').value.trim()
+            fetch('/cart/proceedToPayment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discountAmount, couponCode })
+            }).then(res => res.json()).then(data => {
+                window.location = '/user/placeOrder?discountAmount=' + data.discountAmount + '&couponCode=' + data.couponCode
+            })
+        }
+
+    </script>
+    <%- include('../layout/userFooter.ejs')%>

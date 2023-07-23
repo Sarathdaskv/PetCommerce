@@ -2,6 +2,8 @@ const express=require('express');
 const userHomePageController=require('../controller/userHomePageController')
 const userProductController=require('../controller/userProductController')
 const userCartController=require('../controller/userCartController')
+const userWishListController=require('../controller/userWishListController')
+const userProfileController=require('../controller/userProfileController')
 const userSession=require('../middleware/userSession')
 const router=express.Router();
 
@@ -13,8 +15,8 @@ router
 
 router
 .route('/userLogin') 
-.get(userSession.userLoginSession,userHomePageController.showLoginPage)
-.post(userHomePageController.userLogin)
+.get(userHomePageController.showLoginPage)
+.post(userHomePageController.userLogin) 
  
 router 
 .route('/signUp')
@@ -26,12 +28,12 @@ router
 
 router
 .route('/verifyOtp')
-.post(userHomePageController.otpVerfication)
+.post(userSession.userLoginSession,userHomePageController.otpVerfication)
 
 
 router
-.route('/resendOtp')  
-.get(userHomePageController.resendOtp) 
+.route('/resendOtp')   
+.get(userSession.userLoginSession,userHomePageController.resendOtp) 
 
 router 
 .route('/forgotPass')
@@ -71,17 +73,41 @@ router
 
 router
 .route('/showProducts')
-.get(userProductController.viewMore)
+.get(userProductController.viewMore) 
+
+router
+.route('/searchProducts')
+.put(userProductController.searchProducts)  
 
 router.route('/product/showDetail')
-.get(userProductController.showProductDetails)
+.get(userProductController.showProductDetails) 
 
+router.route('/cart')  
+.get(userCartController.showCart)
+.delete(userCartController.removeProducts) 
 
-router.route('/cart')
-.get(userSession.userLoginSession,userCartController.showCart)
 
 router
 .route('/product/addToCart')
-.post(userSession.userLoginSession,userCartController.addToCart)
+.post(userCartController.addToCart)   
 
-module.exports=router; 
+router
+.route('/cart/changeProductQuanity')
+.put(userCartController.addCount)
+.delete(userCartController.reduceCount) 
+ 
+
+router
+.route('/wishlist')
+.get(userSession.userLoginSession,userWishListController.showWishlistPage)
+.post(userSession.userLoginSession,userWishListController.addToWishList)
+.delete(userSession.userLoginSession,userWishListController.removeProduct)
+
+router
+.route('/userProfile')
+.get(userSession.userLoginSession,userProfileController.showProfilePage)
+
+
+
+
+module.exports=router;  
