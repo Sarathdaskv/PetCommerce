@@ -5,11 +5,11 @@
             <div class="col-lg-3">
                 <div class="profileSideBar d-flex mb-3">
                     <div>
-                        <button style="border: 0; background: transparent;"><img src="/img/man.png" alt=""></button>
+                        <button style="border: 0; background: transparent;"><img src="/img/default_userPhoto.jpg" alt=""></button>
                     </div>
                     <div class="username">
                         <p class="mb-0">Hello Welcome,</p>
-                        <span><%= userDetails.user_Name %></span>
+                        <span><%= userDetails.userName %></span>
                     </div>
                 </div>
 
@@ -17,17 +17,17 @@
                     <div class="row">
                         <div>
                             <div class="menu d-flex">
-                                <span class="material-symbols-outlined">
+                                <!-- <span class="material-symbols-outlined">
                                     folder
-                                </span>
+                                </span> -->
                                 <a class="title">My Orders</a>
                             </div>
                         </div>
                         <div>
                             <div class="menu d-flex">
-                                <span class="material-symbols-outlined">
+                                <!-- <span class="material-symbols-outlined">
                                     person
-                                </span>
+                                </span> -->
                                 <a class="title">Account Settings</a>
                             </div>
                             <div class="submenus">
@@ -62,15 +62,15 @@
                                 <div style="width: 100%; padding-right: 12px;" id="profileData">
                                     <div class="d-flex" style="margin-bottom: 10px;">
                                         <div class="field" style="width: 270px; padding-right: 12px;">
-                                            <label for="" class="form-label">First Name</label>
-                                            <input disabled type="text" class="form-control" id="first_Name" name="first_Name"
-                                                style="width: 100%;" value="<%= userDetails.first_Name %>">
+                                            <label for="" class="form-label">Full  Name</label>
+                                            <input disabled type="text" class="form-control" id="name" name="name"
+                                                style="width: 100%;" value="<%= userDetails.name %>" required>
                                         </div>
-                                        <div class="field" style="width: 270px; padding-right: 12px;">
+                                        <!-- <div class="field" style="width: 270px; padding-right: 12px;">
                                             <label for="" class="form-label">Last Name</label>
                                             <input disabled type="text" class="form-control" id="last_Name" name="last_Name"
                                                 style="width: 100%;" value="<%= userDetails.last_Name %>">
-                                        </div>
+                                        </div> -->
                                         <div id="proBtn" style="display: none;">
                                             <label for=""></label>
                                             <input type="submit" class="btn btn-primary" id=""
@@ -80,10 +80,10 @@
                                     <div class="d-flex" style="margin-bottom: 10px;">
                                         <div class="field" style="width: 270px; padding-right: 12px;">
                                             <label for="" class="form-label">User Name</label>
-                                            <input disabled type="text" class="form-control" id="user_Name" name="user_Name"
-                                                style="width: 100%;" value="<%= userDetails.user_Name %>">
-                                        </div>
-                                        <div class="field" style="width: 270px; padding-right: 12px;">
+                                            <input disabled type="text" class="form-control" id="userName" name="userName"
+                                                style="width: 100%;" value="<%= userDetails.userName %>" required>
+                                        </div> 
+                                        <!-- <div class="field" style="width: 270px; padding-right: 12px;">
                                             <label for="" class="form-label">Your Gender</label>
                                             <div>
                                                 <input class="form-check-input me-3" type="radio"
@@ -93,7 +93,7 @@
                                                     name="gender" id="flexRadioDefault1"
                                                     value="Female">Female
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -112,13 +112,13 @@
                                     <div class="d-flex" style="margin-bottom: 10px;">
                                         <div class="field" style="width: 270px; padding-right: 12px;">
                                             <label for="" class="form-label">Mobile No.</label>
-                                            <input disabled type="number" class="form-control" id="mobile_No"
-                                                name="mobile_No" style="width: 100%;" value="<%= userDetails.mobile_No %>">
+                                            <input disabled type="text" class="form-control" id="phoneNumber"
+                                                name="phoneNumber" style="width: 100%;" value="<%= userDetails.phoneNumber %>" pattern="[0-9]{10}" required>
                                         </div>
                                         <div class="field" style="width: 270px; padding-right: 12px;">
                                             <label for="" class="form-label">Email</label>
-                                            <input disabled type="email" class="form-control" id="user_Email"
-                                                name="user_Email" style="width: 100%;" value="<%= userDetails.user_Email %>">
+                                            <input disabled type="text" class="form-control" id="email"
+                                                name="email" style="width: 100%;" value="<%= userDetails.email %> "  required>
                                         </div>
                                         <div>
                                             <label for=""></label>
@@ -155,16 +155,17 @@
                         <form action="" id="changePassword">
                             <div class="pb-2" style="width: 100%;">
                                 <div style="width: 100%; padding-right: 12px;">
+                                    <small id="userProfilePasswordError" style="color: red;"></small>
                                     <div class="d-flex" style="margin-bottom: 10px;">
                                         <div class="field" style="width: 270px; padding-right: 12px;">
                                             <label for="" class="form-label">New Password</label>
-                                            <input type="password" class="form-control" id="" name="password"
-                                                style="width: 100%;">
+                                            <input type="password" class="form-control" id="profilePassword" name="profilePassword"
+                                                style="width: 100%;" required>
                                         </div>
                                         <div class="field" style="width: 270px; padding-right: 12px;">
                                             <label for="" class="form-label">Confirm Password</label>
-                                            <input type="password" class="form-control" id="" name=""
-                                                style="width: 100%;">
+                                            <input type="password" class="form-control" id="profileCfmPassword" name="profileCfmPassword"
+                                                style="width: 100%;" required>
                                         </div>
                                         <div>
                                             <label for=""></label>
@@ -208,7 +209,8 @@
             method: 'get',
             headers: {'Content-Type':'application/json'}
         }).then(res => res.json()).then(data =>{
-            let datas = data.addressList.address
+           // console.log(data.addressList[0].addresses);
+            let datas = data.addressList[0].addresses
             let addressess = 
             ``
             for( var i=0;i<datas.length;i++){
@@ -216,11 +218,11 @@
                         `<div style="border: 1px solid #e0e0e0; margin-top: 20px; border-radius: 2px 0;">
                                 <div style="width: 100%; overflow: hidden; padding: 20px;">
                                     <p style="line-height: 1.5">
-                                        <span style="font-weight: 600; font-size: 14px;">${datas[i].name}</span>
+                                        <span style="font-weight: 600; font-size: 14px;">${datas[i].building}</span>
                                         <span
-                                            style="font-weight: 600; padding-right: 15px; font-size: 14px;">${datas[i].mobile_No}</span>
-                                            <a href="/userProfile/addressEditPage?addressID=${datas[i]._id}&addressDoc=${data.addressList._id}" id="emailEditBtn" class="edit">Edit</a>
-                                            <a onclick="addressDelete('${datas[i]._id}','${data.addressList._id}')" href="#" id="emailEditBtn" class="edit">Delete</a>
+                                            style="font-weight: 600; padding-right: 15px; font-size: 14px;">${datas[i].mobileNumber}</span>
+                                            <a href="/userProfile/addressEditPage?addressID=${datas[i]._id}" id="emailEditBtn" class="edit">Edit</a>
+                                            <a onclick="addressDelete('${datas[i]._id}')" href="#" id="emailEditBtn" class="edit">Delete</a>
                                     </p>
                                     <span style="margin-top: 10px; width: 100%; display: block; font-size: 14px;">${datas[i].address}</span>
                                 </div>
@@ -229,6 +231,7 @@
                 addressess +=
                  ``
                  address.innerHTML = addressess
+
         }).catch((error)=>{
             console.log(error.message);
         })
@@ -238,12 +241,14 @@
         fetch('/userProfile/addressDelete',{
             method: 'DELETE',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({addressID,addressDocID})
+            body: JSON.stringify({addressID})
         }).then(()=>{
             window.location.reload()
         })
     }
+ 
 
+    
     
     
 </script>

@@ -2,11 +2,13 @@ const express=require('express');
 const router=express.Router();
 const adminController=require('../controller/adminController')
 const adminCustomerManagement=require('../controller/adminCustomerManagement')
+const coupon=require('../controller/adminCouponController')
 const category=require('../controller/adminCategoryController')
 const products=require('../controller/adminProductController')
 const adminSession=require('../middleware/adminSession')
 const dashboard=require('../controller/adminDashboardController')
 const banners=require('../controller/adminBannerController')
+const orders=require('../controller/adminOrderController')
 const upload=require('../utilities/ImageProcessor')
 
 router
@@ -55,7 +57,7 @@ router.route('/productManagement')
 
   //product edit
   router.route('/productManagement/:id')
-  .get(adminSession,products.editProducts)
+  .get(adminSession,products.editProducts) 
   .post(adminSession,
     upload.fields([ 
       { name: "frontImage", maxCount: 1 },
@@ -68,7 +70,19 @@ router.route('/productManagement')
 router 
 .route('/productManagement/changeListing/:id')
 .patch(adminSession,products.changeListing) 
-   
+  
+
+//coupons
+router
+.route('/couponManagement')
+.get(adminSession,coupon.viewCoupons)
+.post(adminSession,coupon.addNew)
+
+router
+.route("/couponmanagement/changeActivity")
+.get(adminSession,coupon.changeActivity);
+
+
 //Banner
 router.route('/bannerManagement')
 .get(adminSession,banners.viewBanners) 
@@ -76,6 +90,17 @@ router.route('/bannerManagement')
 .patch(adminSession,banners.changeBannerActivity)
 .delete(adminSession,banners.deleteBanner)
 
+//orders
+
+router
+.route('/orders')
+.get(adminSession,orders.viewAllOrders)
+.patch(adminSession,orders.deliverOrder)
+
+
+router
+.route('/orders/:id')
+.get(adminSession,orders.orderDetails)
 
 
 

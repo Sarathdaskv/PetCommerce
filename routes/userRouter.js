@@ -4,6 +4,7 @@ const userProductController=require('../controller/userProductController')
 const userCartController=require('../controller/userCartController')
 const userWishListController=require('../controller/userWishListController')
 const userProfileController=require('../controller/userProfileController')
+const userOrderController=require('../controller/userOrderController')
 const userSession=require('../middleware/userSession')
 const router=express.Router();
 
@@ -15,9 +16,13 @@ router
 
 router
 .route('/userLogin') 
-.get(userHomePageController.showLoginPage)
+.get(userHomePageController.showLoginPage) 
 .post(userHomePageController.userLogin) 
- 
+
+router
+.route('/logOut')
+.get(userHomePageController.doLogOut) 
+
 router 
 .route('/signUp')
 .get(userHomePageController.signUpPage)  
@@ -28,12 +33,12 @@ router
 
 router
 .route('/verifyOtp')
-.post(userSession.userLoginSession,userHomePageController.otpVerfication)
+.post(userHomePageController.otpVerfication)
 
 
 router
 .route('/resendOtp')   
-.get(userSession.userLoginSession,userHomePageController.resendOtp) 
+.get(userHomePageController.resendOtp) 
 
 router 
 .route('/forgotPass')
@@ -93,20 +98,81 @@ router
 
 router
 .route('/cart/changeProductQuanity')
-.put(userCartController.addCount)
+.put(userCartController.addCount) 
 .delete(userCartController.reduceCount) 
- 
+
+router  
+.route('/cart/applyCoupon')      
+.post(userSession.userLoginSession,userCartController.applyCoupon)
 
 router
+.route('/cart/proceedToPayment') 
+.post(userSession.userLoginSession,userCartController.proceedToPayment)
+
+router
+.route('/placeOrder')
+.get(userSession.userLoginSession,userOrderController.placeOrderPage)
+.post(userSession.userLoginSession,userOrderController.placeOrder)
+
+router
+.route('/orderSuccess')
+.get(userSession.userLoginSession,userOrderController.orderSuccess)
+
+router
+.route('/orders')    
+.get(userSession.userLoginSession,userOrderController.viewOrders)
+
+router
+.route('/orders/cancel')
+.post(userSession.userLoginSession,userOrderController.cancelOrders)
+
+router
+.route('/orders/viewOrderDetails')
+.post(userSession.userLoginSession,userOrderController.getOrderProductDetails)
+  
+router    
 .route('/wishlist')
 .get(userSession.userLoginSession,userWishListController.showWishlistPage)
 .post(userSession.userLoginSession,userWishListController.addToWishList)
 .delete(userSession.userLoginSession,userWishListController.removeProduct)
 
-router
-.route('/userProfile')
-.get(userSession.userLoginSession,userProfileController.showProfilePage)
+router  
+.route('/userProfile')    
+.get(userSession.userLoginSession,userProfileController.showProfilePage) 
 
+router
+.route('/userProfile/profile/update')
+.put(userSession.userLoginSession,userProfileController.updateProfile) 
+
+router 
+.route('/userProfile/email/update') 
+.put(userSession.userLoginSession,userProfileController.updateEmailPhone)
+
+
+router    
+.route('/userProfile/password/update') 
+.put(userSession.userLoginSession,userProfileController.updatePassword)       
+
+router
+.route('/addressPage')
+.get(userSession.userLoginSession,userProfileController.getAddressPage)
+.post(userSession.userLoginSession,userProfileController.addAddress)
+
+router
+.route('/userProfile/address') 
+.get(userSession.userLoginSession,userProfileController.showAddress) 
+
+router
+.route('/userProfile/addressEditPage')
+.get(userSession.userLoginSession,userProfileController.addressEditPage) 
+
+router 
+.route('/userProfile/address/update')
+.post(userSession.userLoginSession,userProfileController.updateAddress) 
+
+router
+.route('/userProfile/addressDelete')
+.delete(userSession.userLoginSession,userProfileController.deleteAddress)
 
 
 

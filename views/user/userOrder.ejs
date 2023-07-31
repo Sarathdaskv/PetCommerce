@@ -1,0 +1,190 @@
+<%- include('../layout/userHeader.ejs')%>
+
+    <div style="background: #eeeeee;">
+        <div class="container-fluid user-order pb-5" style="padding-top: 30px; ">
+            <div class="row px-xl-5">
+                <div class="projects">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 style="font-size: 19px; font-weight: bold;">Orders List</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <% if (productList <=0) { %>
+                                    <h3>No Orders</h3>
+
+                                    <% } else { %>
+                                        <table width="100%" id="order_table">
+                                            <thead style="text-align: center;">
+                                                <tr>
+                                                    <td>Order ID</td>
+                                                    <td>Order Date</td>
+                                                    <td>Payment Type</td>
+                                                    <td>Order Status</td>
+                                                    <td>Expected Delivery</td>
+                                                    <td>Amount</td>
+                                                    <td>View</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for (values of productList) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= values._id %>
+                                                        </td>
+                                                        <td>
+                                                            <%= values.orderedOn %>
+                                                        </td>
+                                                        <td>
+                                                            <%= values.modeOfPayment %>
+                                                        </td>
+                                                        <% if (values.status=="Ordered" ) { %>
+                                                            <td>
+                                                                <span class="status pink"></span>
+                                                                <%= values.status %>
+                                                            </td>
+                                                            <% } else if(values.status=="In-transit" ) { %>
+                                                                <td>
+                                                                    <span class="status orange"></span>
+                                                                    <%= values.status %>
+                                                                </td>
+                                                                <% }else if(values.status=="Shipped" ) { %>
+                                                                    <td>
+                                                                        <span class="status blue"></span>
+                                                                        <%= values.status %>
+                                                                    </td>
+                                                                    <% } else if(values.status=="Delivered" ) { %>
+                                                                        <td>
+                                                                            <span class="status green"></span>
+                                                                            <%= values.status %>
+                                                                        </td>
+                                                                        <% } else if(values.status=="Cancelled" ) { %>
+                                                                            <td>
+                                                                                <span class="status red"></span>
+                                                                                <%= values.status %>
+                                                                            </td>
+                                                                            <% } else if(values.status=="Placed" ) { %>
+                                                                                <td>
+                                                                                    <span class="status yellow"></span>
+                                                                                    <%= values.status %>
+                                                                                </td>
+                                                                                <% }else if(values.status=="Pending" ) {
+                                                                                    %>
+                                                                                    <td>
+                                                                                        <span
+                                                                                            class="status skyblue"></span>
+                                                                                        <%= values.status %>
+                                                                                    </td>
+                                                                                    <% } %>
+                                                                                        <td>
+                                                                                            <%= expectedDeliveryDate%>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <%= values.finalPrice %>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <button type="button"
+                                                                                                class="btn btn-warning"
+                                                                                                data-bs-toggle="modal"
+                                                                                                data-bs-target="#addCategory"
+                                                                                                onclick="view('<%=values._id%>')">View
+                                                                                                Detail
+                                                                                            </button>
+                                                                                        </td>
+                                                    </tr>
+                                                    <% } %>
+                                            </tbody>
+                                        </table>
+                                        <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal for Product Details -->
+        <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Order Details</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="table_main">
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function view(orderId) {
+                const tableMain = document.getElementById('table_main')
+                fetch('/orders/viewOrderDetails', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId })
+                }).then(res => res.json()).then(data => {
+                    let datas = data.orderedProducts
+                    let table =
+                        ` <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Product Name</th>
+                        <th>Product price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>`
+                    datas.summary.forEach((product)=> {
+                        table +=
+                            `<tr>
+                            <td>
+                                <div class="mb-3" style="background-image:url('/img/products/${product.product.frontImage}'); width:50px;height:50px; background-size:contain;background-repeat:no-repeat"></div>
+                            </td>
+                            <td>${product.product.name}</td>
+                            <td>${product.totalPrice}</td>
+                            <td>${product.quantity}</td>
+                        </tr>`
+                    })
+                    table +=
+                        `</tbody>
+            </table>
+        </div>
+        <div class="modal-footer">`
+                        table +=
+                            `<button type="submit" onclick="orderCancel( '${data.orderedProducts._id}')" class="btn btn-primary">CANCEL
+                            ORDER</button>`
+                    
+                    table +=
+                        ` </div>`
+                    tableMain.innerHTML = table
+                })
+            }
+
+            $(document).ready(function () {
+                $('#order_table').DataTable();
+            });
+
+
+            // Order Cancel
+            function orderCancel(orderId) {
+                fetch('/orders/cancel', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId })
+                }).then(res => res.json()).then(data => {
+                    console.log(data);
+                    window.location = '/orders'
+                })
+            }
+
+        </script>
+
+        <%- include('../layout/userFooter.ejs')%>

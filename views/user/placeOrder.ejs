@@ -1,0 +1,262 @@
+<%- include('../layout/userHeader.ejs')%>
+
+
+<div style="background: #eeeeee;">
+    <div class="container-fluid pb-5" style="padding-top: 30px;">
+        <form action="" id="checkout">
+            <input type="text" name="userID" id="" value="<%= userData._id %>" hidden>
+        <div class="row px-xl-5">
+            
+                <div class="col-lg-7 mb-3" style="display: block;  overflow-x: auto;">
+                    <!-- For select Address
+                    <div class="col-lg-12 mb-4">
+                        <h5 class="mb-3 text-uppercase" style="line-height: 1.2;">For Billing Address</h5>
+                        <div class="p-4" style="width: 100%; background: #fff;">
+                            <span id="result" name="address" ></span>
+                            
+                        </div>
+                    </div> -->
+                    <!-- Selected Address End -->
+
+                    <!-- Address Listing -->
+                    <div class="col-lg-12 mb-4">
+                        <a href="/addressPage" class="btn btn-success mb-2">Add new Address</a>
+                        <div class="p-4" style="width: 100%; background: #fff;">
+                            <% let address = addressList ? addressList.addresses : "" %>
+                            <% if (address =="") { %>
+                                <h4>No Address. Add Some Address</h4>
+                                <% } else { %>
+                                    <% address.forEach((values,i)=> { %>
+                                        <div class="mb-2 d-flex">
+                                            <div>
+                                                <input type="radio" class="form-check-input me-2" name="address"
+                                                    value="<%= values._id %>" required>
+                                                    
+                                            </div>
+                                           
+                                            <div style="text-align: left;">
+                                                <p class="m-0" style="font-weight: bold;">
+                                                    <%= values.building %>
+                                                </p>
+                                                <p style="font-size: 14px;">
+                                                    <strong>Address Line : - </strong>
+                                                    <%= values.address %><br>
+                                                        <!-- <strong>Locality : - </strong>
+                                                        <%= values.locality %><br> -->
+                                                            <strong>City : - </strong>
+                                                            <%= values.city %><br>
+                                                                <strong>State : - </strong>
+                                                                <%= values.state %><br>
+                                                                    <!-- <strong>LandMark : - </strong>
+                                                                    <%= values.land_Mark %><br> -->
+                                                                        <strong>Mobile No : - </strong>
+                                                                        <%= values.mobileNumber %><br>
+                                                                            <strong>Alternative No : - </strong>
+                                                                            <%= values.alterMobile %><br>
+                                                                                <span style="font-weight: bold;">
+                                                                                    <%= values.pinCode %>
+                                                                                </span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                    <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address Listing end -->
+
+                <!-- For Order Details -->
+                <div class="col-lg-5 mb-3" style="display: block;  overflow-x: auto;">
+                    <div class="col-lg-12 mb-4">
+                        <h5 class="mb-3 text-uppercase" style="line-height: 1.2;">Order Details</h5>
+                        <div class="p-4" style="width: 100%; background: #fff;">
+                            <div style="border-bottom: 1px solid #bdc2c7;" class="mb-3">
+                                <% if(couponCode) { %>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <h6 style="max-width: 15rem; overflow: hidden; font-weight: bold;">Coupon Code
+                                        </h6>
+                                        <h6 style="text-transform: uppercase; font-weight: bold;" id="coupon">
+                                            <%=couponCode %>
+                                        </h6>
+                                    </div>
+                                    <% } %>
+                                        <label for="" style="font-weight: bold; text-decoration: underline;"
+                                            class="mb-2">Products</label>
+                                        <% cartProducts.products.forEach((item,i)=> { %>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <h6
+                                                    style="max-width: 20rem; max-height: 2rem; text-align: left; overflow: hidden;">
+                                                    <%= item.name.name %>
+                                                </h6>
+                                            </div>
+                                            <% }) %>
+                            </div>
+                            <div style="border-bottom: 1px solid #bdc2c7;" class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <h6 style="max-width: 15rem; overflow: hidden;">Sub Total</h6>
+                                    <h6>
+                                        <%=totalAmount %>
+                                    </h6>
+                                </div>
+                                <div class="d-flex justify-content-between mb-1">
+                                    <h6 style="max-width: 15rem; overflow: hidden;">Discount</h6>
+                                    <h6 id="discount">
+                                        <%=discountAmount %>
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <label for="" style="font-weight: bold;" class="mb-2">Total Amount</label>
+                                    <h6 style="font-weight: bold;">
+                                        <% let finalAmount=totalAmount - discountAmount %>
+                                            <%= finalAmount %>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Payment Methods -->
+                    <div class="col-lg-12">
+                        <h5 class="mb-3 text-uppercase" style="line-height: 1.2;">Payment Methods</h5>
+                        <div class="p-4" style="width: 100%; background: #fff;">
+                            <!-- <div class="mb-2">
+                                <input type="radio" class="form-check-input me-2" name="paymentMethod"
+                                    value="Online Bank">Online Payment
+                            </div> -->
+                            <div class="mb-2">
+                                <input type="radio" class="form-check-input me-2" name="paymentMethod" value="COD">COD
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-success">Place Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Order Details End -->
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    let radioBtn = document.querySelectorAll("input[name='address']");
+    let result = document.getElementById('result');
+
+    let findSelected = () => {
+        let selected = document.querySelector("input[name='address']:checked").value;
+        result.textContent = `${selected}`;
+    }
+
+    radioBtn.forEach(radioBtn => {
+        radioBtn.addEventListener("change", findSelected);
+    });
+
+
+
+    //Order Placing
+    let addOfferForm = document.getElementById('checkout')
+    
+    let discountAmount = document.getElementById('discount').innerHTML.trim()
+    let coupon = document.getElementById('coupon') ? document.getElementById('coupon').innerHTML.trim() : "";
+    $("#checkout").submit((e) => {
+        e.preventDefault()
+       // let addressId=selectedAddressId;
+        const formData = new FormData(addOfferForm);
+        //Converting the data to Json object
+        const data = Object.fromEntries(formData)
+       
+        let dataObject = {
+            userID: data.userID,
+            address: data.address,
+           // addressId:selectedAddressId,
+            paymentMethod: data.paymentMethod,
+            discountAmount: discountAmount,
+            coupon: coupon
+        }
+        $.ajax({
+            url: '/placeOrder',
+            method: 'post',
+            data: dataObject,
+            success: (response) => {
+                if(response.noAddress==true){
+                    
+                    Swal.fire({
+                    position: 'center',
+                    icon: 'warning',
+                    title: 'Kindly add some address',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                setTimeout(()=>{
+                    location.href = '/addressPage'
+                },1500)
+                }
+                if (response.codSuccess) {
+                    location.href = '/orderSuccess'
+                }
+                // else {
+                //     razorpayPayment(response)
+                // }
+            }
+        })
+    })
+
+
+    function razorpayPayment(order) {
+        var options = {
+            "key": "rzp_test_K9xHI2IycsZVd3", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "MyCam",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                // alert(response.razorpay_payment_id);
+                // alert(response.razorpay_order_id);
+                // alert(response.razorpay_signature);
+
+                verifyPayment(response, order);
+            },
+            "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+            "prefill": {
+                "name": "Jibi George",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    function verifyPayment(payment, order) {
+        $.ajax({
+            url: '/verifyPayment',
+            data: {
+                payment,
+                order
+            },
+            method: 'post',
+            success:(response)=>{
+                if(response.status){
+                    location.href = '/order-success'
+                }else{
+                    alert("Payment Failed")
+                }
+            }
+        })
+    }
+</script>
+
+<%- include('../layout/userFooter.ejs')%>

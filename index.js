@@ -1,7 +1,7 @@
 const express=require('express');
 const session=require('express-session')
 const mongoose=require('mongoose')
-//const nocache=require('nocache')
+const nocache=require('nocache')
 const dotenv=require('dotenv')
 const morgan=require('morgan')
 const path=require('path')
@@ -19,7 +19,7 @@ dbConnect()//data base connection
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-//app.use(nocache());
+app.use(nocache());
 
 
 const PORT=process.env.PORT||8080;

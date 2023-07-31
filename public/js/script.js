@@ -184,31 +184,31 @@ function adminLoginValidation() {
         document.getElementById('passwordError').innerHTML = ""
     }
     if (error == 1) {
-        return false  
- 
+        return false
+
     }
     else {
-        return true;    
+        return true;
     }
 
 }
 
 function addToCart(productId, price) {
     let count = $('#cartCount').html()
-    let wishCount=$('#whishlistCount').html()
-    $.ajax({ 
+    let wishCount = $('#whishlistCount').html()
+    $.ajax({
         url: '/product/addToCart',
         type: 'post',
         data: {
-            price:price,
-            productId:productId,
+            price: price,
+            productId: productId,
         },
-        success: (response)=>{
-            if(response.status=="addedToCart"){
-                count = parseInt(count)+1
+        success: (response) => {
+            if (response.status == "addedToCart") {
+                count = parseInt(count) + 1
                 $("#cartCount").html(count)
-                if(wishCount>0){
-                    wishCount = parseInt(wishCount)-1
+                if (wishCount > 0) {
+                    wishCount = parseInt(wishCount) - 1
                     $("#whishlistCount").html(wishCount)
                 }
                 Swal.fire({
@@ -219,13 +219,13 @@ function addToCart(productId, price) {
                     timer: 1500
                 })
                 $(".content").load(location.href + " .content");
-              
+
             }
-            else if(response.status=="countAdded"){ 
-                count = parseInt(count)+1
+            else if (response.status == "countAdded") {
+                count = parseInt(count) + 1
                 $("#cartCount").html(count)
-                if(wishCount>0){
-                    wishCount = parseInt(wishCount)-1
+                if (wishCount > 0) {
+                    wishCount = parseInt(wishCount) - 1
                     $("#whishlistCount").html(wishCount)
                 }
                 Swal.fire({
@@ -236,47 +236,157 @@ function addToCart(productId, price) {
                     timer: 1500
                 })
                 $(".content").load(location.href + " .content");
-                
-            }
-            else{
-                location.href='/userLogin'
-            }
-        } 
-    })
-}
 
-
-function addtoWhislist(productId){
-    let count = $('#whishlistCount').html()
-    $.ajax({
-        url:'/wishlist',
-        data: {productId:productId},
-        method: 'post',
-        success: (response)=>{
-            console.log(response);
-            if(response.status==true){
-              
-                count = parseInt(count)+1
-                $("#whishlistCount").html(count)
-                Swal.fire({ 
-                    position: 'top-right',
-                    icon: 'success',
-                    title: 'product has been added to wishlist', 
-                    showConfirmButton: false,
-                    timer: 1500 
-                }) 
-            } 
-            else if(response.status=="alreadyExists"){
-                Swal.fire({ 
-                    position: 'top-right',
-                    icon: 'success',
-                    title: 'product exists in  your wishlist', 
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            }else{
-                location.href='/userLogin' 
+            }
+            else {
+                location.href = '/userLogin'
             }
         }
     })
 }
+
+
+function addtoWhislist(productId) {
+    let count = $('#whishlistCount').html()
+    $.ajax({
+        url: '/wishlist',
+        data: { productId: productId },
+        method: 'post',
+        success: (response) => {
+            console.log(response);
+            if (response.status == true) {
+
+                count = parseInt(count) + 1
+                $("#whishlistCount").html(count)
+                Swal.fire({
+                    position: 'top-right',
+                    icon: 'success',
+                    title: 'product has been added to wishlist',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+            else if (response.status == "alreadyExists") {
+                Swal.fire({
+                    position: 'top-right',
+                    icon: 'success',
+                    title: 'product exists in  your wishlist',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            } else {
+                location.href = '/userLogin'
+            }
+        }
+    })
+}
+
+
+// Profile information update
+function editProfile() {
+    document.getElementById("name").disabled = false
+    document.getElementById("userName").disabled = false
+    document.getElementById("proBtn").style.display = 'block'
+    document.getElementById("proEditBtn").style.display = 'none'
+    document.getElementById("proCaneclBtn").style.display = 'block'
+}
+
+
+function cancelBtn() {
+    document.getElementById("name").disabled = true
+    document.getElementById("userName").disabled = true
+    document.getElementById("proBtn").style.display = 'none'
+    document.getElementById("proEditBtn").style.display = 'block'
+    document.getElementById("proCaneclBtn").style.display = 'none'
+}
+
+
+// Email & Mobile Information update fields enable and disable
+function emailEdit() {
+    document.getElementById('phoneNumber').disabled = false
+    document.getElementById('email').disabled = false
+    document.getElementById("emailBtn").style.display = 'block'
+    document.getElementById("emailCancelBtn").style.display = 'block'
+    document.getElementById("emailEditBtn").style.display = 'none'
+}
+function emailCancel() {
+    document.getElementById('phoneNumber').disabled = true
+    document.getElementById('email').disabled = true
+    document.getElementById("emailBtn").style.display = 'none'
+    document.getElementById("emailCancelBtn").style.display = 'none'
+    document.getElementById("emailEditBtn").style.display = 'block'
+}
+
+// Profile Update Form
+const profileUpdateForm = document.getElementById('profileUpdateForm')
+
+profileUpdateForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const formData = new FormData(profileUpdateForm);
+
+    //Converting the data to Json object
+    const data = Object.fromEntries(formData)
+
+    fetch('/userProfile/profile/update', {
+        method: 'put',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).then((response) => {
+        window.location.reload()
+    })
+
+})
+
+
+// Email and Mobile Update Form
+const emailUpdateForm = document.getElementById('emailUpdateForm')
+emailUpdateForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(emailUpdateForm);
+    const data = Object.fromEntries(formData);
+
+    fetch('/userProfile/email/update', {
+        method: 'put',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).then((response) => {
+        window.location.reload()
+    })
+})
+
+
+
+//Update Password
+const changePasswordForm = document.getElementById('changePassword')
+changePasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(changePasswordForm);
+    const data = Object.fromEntries(formData)
+
+    let NewPassword = document.getElementById('profilePassword').value.trim();
+    let cfmPassword = document.getElementById('profileCfmPassword').value.trim();
+
+    if(NewPassword===cfmPassword){
+        fetch('/userProfile/password/update', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(() => {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'password has been updated',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            setTimeout(()=>{
+                location.reload()
+            },1500)
+        })
+      
+    }
+    else{
+        document.getElementById('userProfilePasswordError').innerHTML='Confirm password should match';
+    }
+    
+})

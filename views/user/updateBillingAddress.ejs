@@ -1,0 +1,73 @@
+<%- include('../layout/userHeader.ejs')%>
+<div style="background: #eeeeee;">
+    <div class="container-fluid pb-5" style="padding-top: 30px;">
+        <div class="row px-xl-5">
+            <div class="col-lg-7 mb-3" style="display: block;  overflow-x: auto;">
+                <!-- For Billing Address -->
+                <div class="col-lg-12 mb-4">
+                    <h5 class="mb-3 text-uppercase" style="line-height: 1.2;">Update Billing Address</h5>
+                    <div class="p-4" style="width: 100%; background: #fff;">
+                        <form action="/userProfile/address/update" method="post" style="text-align: left;" id="">
+                            <!-- <input type="text" value="<%= address._id %>" name="addressID" style="display: none;"> -->
+                            <input type="text" value="<%= addressID %>" name="addressID" style="display: none;">
+                            <div class="mb-3 d-flex">
+                                <div style="width: 50%;" class="me-1">
+                                    <label for="" class="form-label">Building Name</label>
+                                    <input type="text" class="form-control" name="building" value="<%= address[0].addresses.building %>">
+                                </div>
+                                <div style="width: 50%;" class="me-1">
+                                    <label for="" class="form-label">Mobile No</label>
+                                    <input type="number" class="form-control" name="mobileNumber" value="<%= address[0].addresses.mobileNumber %>">
+                                </div>
+                            </div>
+                            <div class="mb-3 d-flex">
+                                <div style="width: 50%;" class="ms-1">
+                                    <label for="" class="form-label">Zip Code/Pin Code</label>
+                                    <input type="text" class="form-control" name="pinCode" value="<%= address[0].addresses.pinCode %>">
+                                </div>
+                                <!-- <div style="width: 50%;" class="ms-1">
+                                    <label for="" class="form-label">Locality</label>
+                                    <input type="text" class="form-control" name="locality" value="<%= address.locality %>">
+                                </div> -->
+                            </div>
+                            <div class="mb-3">
+                                <div class="me-1">
+                                    <label for="" class="form-label">Address</label>
+                                    <textarea type="text" class="form-control" name="address" style="height: 100px;"><%= address[0].addresses.address %></textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 d-flex">
+                                <div style="width: 50%;" class="me-1">
+                                    <label for="" class="form-label">City</label>
+                                    <input type="text" class="form-control" name="city" value="<%= address[0].addresses.city %>">
+                                </div>
+                                <div style="width: 50%;" class="ms-1">
+                                    <label for="" class="form-label">State</label>
+                                    <input type="text" class="form-control" name="state" value="<%= address[0].addresses.state %>">
+                                </div>
+                            </div>
+                            <div class="mb-3 d-flex">
+                                <!-- <div style="width: 50%;" class="me-1">
+                                    <label for="" class="form-label">Land Mark</label>
+                                    <input type="text" class="form-control" name="land_Mark" value="<%= address.land_Mark %>">
+                                </div> -->
+                                <div style="width: 50%;" class="me-1">
+                                    <label for="" class="form-label">Alternative Phone</label>
+                                    <%if(address[0].addresses.alterMobile!=null) {%>
+                                    <input type="text" class="form-control" name="alterMobile" value="<%= address[0].addresses.alterMobile %>">
+                                   <% }else{ %>
+                                    <input type="text" class="form-control" name="alterMobile" value="">
+                                    <%}%>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-warning">UPDATE</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Bill Address add form end  -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../layout/userFooter.ejs')%>

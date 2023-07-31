@@ -1,4 +1,5 @@
 <%- include('../layout/userHeader.ejs')%>
+
     <div style="background: #eeeeee;">
         <div class="container-fluid pb-5" style="padding-top: 30px;">
             <div class="row px-xl-5">
@@ -78,7 +79,7 @@
                     <div class="bg-light mb-5" style="padding: 30px;">
                         <div class="" style="border-bottom: 1px solid #dee2e6">
                             <div class="d-flex justify-content-between mb-3">
-                                <input type="text" class="form-control me-4" id="coupon_Code"
+                                <input type="text" class="form-control me-4" id="couponCode"
                                     style="text-transform: uppercase;">
                                 <button class="btn btn-warning ps-4 pe-4" onclick="applyCoupon()">APPLY</button>
                             </div>
@@ -164,7 +165,7 @@
                         document.getElementById("subTotal").innerHTML = response.userCart.totalPrice
                         document.getElementById('discount').innerHTML = 0
                         document.getElementById("totalAmount").innerHTML = response.userCart.totalPrice
-                        document.getElementById('coupon_Code').value = ""
+                        document.getElementById('couponCode').value = ""
                         document.getElementById('message').innerHTML = ""
                     }
                 }
@@ -194,7 +195,7 @@
                     document.getElementById("subTotal").innerHTML = response.userCart.totalPrice
                     document.getElementById('discount').innerHTML = 0
                     document.getElementById("totalAmount").innerHTML = response.userCart.totalPrice
-                    document.getElementById('coupon_Code').value = ""
+                    document.getElementById('couponCode').value = ""
                     document.getElementById('message').innerHTML = ""
 
                 }
@@ -203,47 +204,49 @@
 
         // Coupon Apply
         function applyCoupon() {
-            let code = document.getElementById('coupon_Code').value.toUpperCase()
+            
+            let code = document.getElementById('couponCode').value.toUpperCase()
             let messageCoupon = document.getElementById('message');
             fetch('/cart/applyCoupon', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code })
             }).then(res => res.json()).then(data => {
-                let cartTotalAmount = data.totalAmount
                 if (data.noCoupon) {
                     let message = `<span style="color: red;"><i class="las la-times"></i>Invalid Coupon Code</span>`
                     messageCoupon.innerHTML = message
+                    setTimeout(()=>{
+                        location.reload()
+                    },800)
                 } else if (data.expiry) {
                     let message = `<span style="color: red;"><i class="las la-times"></i>Coupon Expired</span>`
                     messageCoupon.innerHTML = message
-                } else if (data.amountExceed) {
-                    let message = `<span style="color: red;"><i class="las la-times"></i>Amount Low</span>`
+                }  else if (data.amountLow) {
+                    let message = `<span style="color: red;"><i class="las la-times"></i>Your cart is Empty</span>`
                     messageCoupon.innerHTML = message
-                } else if (data.flatDiscount) {
-                    document.getElementById('discount').innerHTML = data.discount
-                    document.getElementById('totalAmount').innerHTML = cartTotalAmount - data.discount
-                    let message = `<span style="color: green;"><i class="las la-check"></i>Coupon valid</span>`
-                    messageCoupon.innerHTML = message
-                } else {
-                    let discounted = document.getElementById('discount').innerHTML = (cartTotalAmount * data.discount) / 100
+                } 
+                
+                else {
+                    let cartTotalAmount = data.response.totalAmount
+                    let discounted =  parseInt((parseInt(cartTotalAmount) * parseInt(data.response.discount)) / 100);
+                    document.getElementById('discount').innerHTML =discounted
                     document.getElementById('totalAmount').innerHTML = cartTotalAmount - discounted
                     let message = `<span style="color: green;"><i class="las la-check"></i>Coupon valid</span>`
                     messageCoupon.innerHTML = message
                 }
             })
-
+            
         }
 
         function ProceedToPayment() {
             let discountAmount = document.getElementById('discount').innerHTML
-            let couponCode = document.getElementById('coupon_Code').value.trim()
+            let couponCode = document.getElementById('couponCode').value.trim()
             fetch('/cart/proceedToPayment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ discountAmount, couponCode })
             }).then(res => res.json()).then(data => {
-                window.location = '/user/placeOrder?discountAmount=' + data.discountAmount + '&couponCode=' + data.couponCode
+                window.location = '/placeOrder?discountAmount=' + data.discountAmount + '&couponCode=' + data.couponCode
             })
         }
 

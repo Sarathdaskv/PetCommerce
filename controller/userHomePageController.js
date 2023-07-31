@@ -88,6 +88,7 @@ const otpVerfication = async (req, res) => {
           password: hashedPassword,
 
         })
+        
         req.session.user = user;
         await userModel.insertMany([user])
         res.render('user/userLoginPage', { userData: 0, errMsg: false })
@@ -145,9 +146,11 @@ const showLoginPage = async (req, res) => {
 
 const userLogin = async (req, res) => {
   try {
-
+    let hashedPassword;
     const checkUser = await userModel.findOne({ email: req.body.email });
-    const hashedPassword = await bcrypt.compare(req.body.password, checkUser.password);
+    if(checkUser){
+     hashedPassword = await bcrypt.compare(req.body.password, checkUser.password);
+    }
     if (checkUser && hashedPassword) {
       if (checkUser.ban) {
         res.render('user/userLoginPage', { userData: 0, errMsg: 'Sorry you are banned' })
@@ -155,10 +158,10 @@ const userLogin = async (req, res) => {
       else {
         req.session.userLoggedIn = true;
         req.session.user = checkUser; 
-        res.redirect('/');
-      }
+        res.redirect('/'); 
+      } 
     } 
-    else { 
+    else {  
       res.render('user/userLoginPage', { userData: 0, errMsg: 'invalid credentials' })
     }
   }
@@ -320,6 +323,17 @@ const landingPage = async (req, res) => {
   }
 }
 
+const doLogOut=async(req,res)=>{
+  req.session.destroy((err)=> {
+    if (err) {
+        console.log("Error");
+        res.send("Error")
+    } else {
+        res.redirect('/')
+    }
+})
+}
+
 module.exports = {
   signUpPage,
   otpVerfication,
@@ -334,4 +348,5 @@ module.exports = {
   resendForgotPasswordOtp,
   resetPassword,
   landingPage,
+  doLogOut
 } 

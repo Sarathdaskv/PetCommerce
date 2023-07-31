@@ -1,9 +1,11 @@
 const categoryModel = require('../model/categoryModel')
+const couponModel = require('../model/couponModel')
 const productModel = require('../model/productModel')
 const cartModel = require('../model/cartModel');
 const wishlistModel = require('../model/wishlistModel')
 const { ObjectId } = require('mongodb');
 const { default: mongoose } = require('mongoose');
+const { response } = require('express');
 
 const addToCart = async (req, res) => {
   try {
@@ -19,7 +21,7 @@ const addToCart = async (req, res) => {
             products: productId,
           },
         });
-      
+
       }
 
       const userCart = await cartModel.findOne({ customer: req.session.user._id })
@@ -323,4 +325,79 @@ const removeProducts = async (req, res) => {
   }
 }
 
-module.exports = { addToCart, showCart, reduceCount, addCount, removeProducts }
+const applyCoupon = async (req, res) => {
+  try {
+    let userData = req.session.user
+    let discountCode = req.body.code
+    let userDetails = await cartModel.findOne({ customer: userData._id })
+    let totalAmount = userDetails.totalPrice;
+    let couponCode = await couponModel.findOne({ code: discountCode })
+    if (totalAmount > 0) {
+      if (couponCode) {
+        let endDate = Date.parse(couponCode.expiryDate)
+        let startDate = Date.parse(couponCode.startingDate)
+        let todayDate = new Date()
+        // todayDate = todayDate.toLocaleDateString("en-US")
+        todayDate = Date.parse(todayDate)
+        if (startDate <= endDate && todayDate <= endDate && couponCode.active == true && couponCode.totalCount>0) {
+          response.totalAmount = totalAmount;
+          response.discount = couponCode.discount;
+          res.json({ response })
+        }
+        else {
+          res.json({ expiry: true })
+        }
+      }
+      else {
+        res.json({ noCoupon: true })
+      }
+    }
+    else {
+      res.json({ amountLow: true })
+    }
+  }
+  catch (err) {
+    console.log(err);
+    res.redirect('/')
+  }
+}
+
+const proceedToPayment = async (req, res) => {
+  try {
+   
+    let discountAmount = req.body.discountAmount;
+    let couponCode = req.body.couponCode.toUpperCase();
+    let cartCount = null;
+    let wishlistCount = null;
+    let cart = 0;
+    let wishlist = 0;
+    let userData = req.session.user;
+    if (req.session.userLoggedIn) {
+      cartCount = await cartModel.findOne({ customer: userData._id })
+      cart = cartCount.totalQuantity;
+      wishlistCount = await wishlistModel.aggregate([
+        {
+          $group: {
+            _id: null,
+            totalSize: {
+              $sum: {
+                $size: "$products"
+              }
+            }
+          }
+        }
+      ])
+      wishlist = parseInt(wishlistCount[0].totalSize);
+
+    }
+    let totalAmount=await cartModel.find({customer:userData._id})
+   let  totalPrice=totalAmount[0].totalPrice - discountAmount;
+   res.send({ discountAmount, couponCode })
+  }
+  catch (err) {
+    console.log(err);
+    res.redirect('/')
+  }
+}
+
+module.exports = { addToCart, showCart, reduceCount, addCount, removeProducts, applyCoupon, proceedToPayment }

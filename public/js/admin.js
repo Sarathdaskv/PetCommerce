@@ -219,3 +219,29 @@ function deleteBanner(id) {
         },
     })
 } 
+
+function printInvoice(divName){
+
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+}
+
+
+// Orders
+function deliverOrder(id, i) {
+    $.ajax({
+      url: "/admin/orders",
+      type: "patch",
+      data: {
+        orderID: id,
+      },
+      success: (res) => {
+        if (res.data.delivered === 1) {
+          $("#deliver" + i).load(location.href + " #deliver" + i);
+        }
+      },
+    });
+  }
