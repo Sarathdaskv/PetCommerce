@@ -245,3 +245,19 @@ function deliverOrder(id, i) {
       },
     });
   }
+
+
+  function adminReturnOrder(id, i) {
+    $.ajax({
+      url: "/admin/orders/return",
+      type: "patch",
+      data: {
+        orderID: id,
+      },
+      success: (res) => {
+        if (res.data.returned === 1) {
+          $("#deliver" + i).load(location.href + " #deliver" + i);
+        }
+      },
+    });
+  }

@@ -52,9 +52,17 @@
                     <span><%=moment(item.deliveredOn).format('lll')%></span>
                     <%}%></span
                   >
-                <%} else {%>
-                  <%=item.status%>
-                  <%}%>
+                
+                  <%} else if(item.status === 'Pending') {%>
+                    <button
+                    class="btn btn-sm btn-dark w-100"
+                    onclick="adminReturnOrder('<%=item._id%>','<%=i%>')"
+                  >
+                  <i class="fa fa-recycle text-warning"></i><span>Refund</span>
+                  </button>
+                    <%}else{%>
+                      <%=item.status%>
+                      <%}%>
               </div>
           </td>
           <td><%= moment(item.orderedOn).format('lll') %> <br /></td>

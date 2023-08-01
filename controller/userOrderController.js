@@ -316,7 +316,6 @@ const getOrderProductDetails = async (req, res) => {
         let orderedProducts = await orderModel.findById(orderId)
             .populate("summary.product")
             .populate("couponUsed")
-        console.log(orderedProducts);
         res.json({ orderedProducts })
 
     }
@@ -348,4 +347,45 @@ const cancelOrders = async (req, res) => {
     }
 }
 
-module.exports = { placeOrderPage, placeOrder, orderSuccess, viewOrders, getOrderProductDetails, cancelOrders } 
+// const returnOrders=async(req,res)=>{
+//     try{
+//         let orderId = req.body.orderId
+//         let orderedProducts = await orderModel.findById(orderId)
+//             .populate("summary.product")
+//             .populate("couponUsed")
+//         res.json({ orderedProducts })
+        
+//     }
+
+//     catch (err) {
+//         console.log(err);
+//         res.redirect('/')
+//     }
+// }
+
+const submitReturnOrders=async(req,res)=>{
+    try{
+        let orderId = req.body.orderId
+        await orderModel.updateOne(
+            {
+                _id: orderId
+            }, 
+            {
+            $set: {
+                status: "Pending"
+            }
+        }
+        )
+        res.json("Pending")
+    }
+    catch (err) {
+        console.log(err);
+        res.redirect('/')
+    }
+}
+
+module.exports = { placeOrderPage, 
+    placeOrder, orderSuccess,
+     viewOrders, getOrderProductDetails,
+      cancelOrders,
+      submitReturnOrders } 

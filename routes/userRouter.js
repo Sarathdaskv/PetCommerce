@@ -126,11 +126,24 @@ router
 .route('/orders/cancel')
 .post(userSession.userLoginSession,userOrderController.cancelOrders)
 
+  
+router
+.route('/orders/return')
+.post(userSession.userLoginSession,userOrderController.getOrderProductDetails)
+ 
+router
+.route('/orders/return/submit')
+.post(userSession.userLoginSession,userOrderController.submitReturnOrders)
+
+
 router
 .route('/orders/viewOrderDetails')
 .post(userSession.userLoginSession,userOrderController.getOrderProductDetails)
-  
-router    
+
+
+
+
+router
 .route('/wishlist')
 .get(userSession.userLoginSession,userWishListController.showWishlistPage)
 .post(userSession.userLoginSession,userWishListController.addToWishList)

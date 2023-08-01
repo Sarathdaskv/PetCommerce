@@ -48,6 +48,11 @@
                                                                     <span class="status orange"></span>
                                                                     <%= values.status %>
                                                                 </td>
+                                                                <% } else if(values.status=="Returned" ) { %>
+                                                                    <td>
+                                                                        <span class="status orange"></span>
+                                                                        <%= values.status %>
+                                                                    </td>
                                                                 <% }else if(values.status=="Shipped" ) { %>
                                                                     <td>
                                                                         <span class="status blue"></span>
@@ -117,11 +122,17 @@
 
 
                     </div>
+
                 </div>
             </div>
         </div>
+      
 
         <script>
+           document.getElementById('exampleModalLabel').innerHTML='Order Details';
+
+
+
             function view(orderId) {
                 const tableMain = document.getElementById('table_main')
                 fetch('/orders/viewOrderDetails', {
@@ -142,7 +153,7 @@
                     </tr>
                 </thead>
                 <tbody>`
-                    datas.summary.forEach((product)=> {
+                    datas.summary.forEach((product) => {
                         table +=
                             `<tr>
                             <td>
@@ -157,13 +168,32 @@
                         `</tbody>
             </table>
         </div>
+          
         <div class="modal-footer">`
-                        table +=
-                            `<button type="submit" onclick="orderCancel( '${data.orderedProducts._id}')" class="btn btn-primary">CANCEL
-                            ORDER</button>`
-                    
-                    table +=
-                        ` </div>`
+                    if (datas.status != "Cancelled" && datas.status != "Returned" && datas.status != "Pending" ) {
+
+                        if (datas.status != "Delivered"  ) {
+                            table +=
+                                `
+                            <button type="submit" onclick="orderCancel( '${data.orderedProducts._id}')" class="btn btn-primary">CANCEL
+                            ORDER</button>
+                            `
+                            table +=
+                                ` </div>`
+                        }
+                        else {
+                            table +=
+                                `
+                            <button type="submit" onclick="returnOrder( '${data.orderedProducts._id}')" class="btn btn-primary">RETURN
+                            ORDER</button>
+                            `
+                            table +=
+                                ` </div>`
+
+                        }
+
+                    }
+
                     tableMain.innerHTML = table
                 })
             }
@@ -182,6 +212,64 @@
                 }).then(res => res.json()).then(data => {
                     console.log(data);
                     window.location = '/orders'
+                })
+            }
+
+
+            function returnOrder(orderId) {
+               
+                const returnOrder = document.getElementById('table_main')
+                document.getElementById('exampleModalLabel').innerHTML='Return Order';
+                fetch('/orders/return', {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId })
+                }).then(res => res.json()).then(data => {
+                   
+                  
+                    let table =`
+                    
+                    <div class="mb-3">
+                                <input type="text" class="form-control" id="reason" placeholder="Reason" name="reason"
+                                    required />
+                            </div>
+
+                            <div class="mb-3">
+                                <input type="number" class="form-control" id="accountNumber" placeholder="Bank Account number"
+                                    name="accountNumber" required />
+                            </div>
+                    
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="ifsc" placeholder="IFSC"
+                                    name="ifsc" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <input type="number" class="form-control" id="cvv" placeholder="CVV"
+                                    name="cvv" required />
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" onclick="submitRequest( '${data.orderedProducts._id}')" class="btn btn-primary">SUBMIT
+                            REQUEST</button>
+                                </div>`
+                    
+                    
+
+                    returnOrder.innerHTML=table;
+
+                })
+            }
+
+            
+            function submitRequest(orderId){
+                fetch('/orders/return/submit', {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId })
+                }).then(res => res.json()).then(data => {
+                    window.location = '/orders'
+
                 })
             }
 

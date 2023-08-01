@@ -102,7 +102,9 @@ router
 .route('/orders/:id')
 .get(adminSession,orders.orderDetails)
 
-
+router
+.route('/orders/return')
+.patch(adminSession,orders.returnOrder)
 
 module.exports=router;    
 
