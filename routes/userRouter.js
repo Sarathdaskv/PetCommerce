@@ -104,7 +104,7 @@ router
 router  
 .route('/cart/applyCoupon')      
 .post(userSession.userLoginSession,userCartController.applyCoupon)
-
+ 
 router
 .route('/cart/proceedToPayment') 
 .post(userSession.userLoginSession,userCartController.proceedToPayment)
@@ -117,6 +117,10 @@ router
 router
 .route('/orderSuccess')
 .get(userSession.userLoginSession,userOrderController.orderSuccess)
+
+router  
+.route('/verifyPayment')
+.post(userSession.userLoginSession,userOrderController.verifyPayment)
 
 router
 .route('/orders')    

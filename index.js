@@ -37,14 +37,18 @@ app.use(
    
 }) 
 );
+
+
 //app.set('views', path.join(__dirname, 'views'))
 //app.set('layout','./views/layout/layout.ejs')
 
 app.use('/admin',require('./routes/adminRoutes'))
 app.use('/',require('./routes/userRouter'));
 
+app.use('*',(req,res)=>{
+    res.render('user/pageNotFound',{userData:0})
+})
 
-  
 app.listen(PORT,()=>{
     console.log(` Server listening at ${PORT}`);
 })

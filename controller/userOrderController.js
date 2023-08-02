@@ -7,6 +7,10 @@ const wishlistModel = require('../model/wishlistModel');
 const { default: mongoose } = require('mongoose');
 const orderModel = require('../model/orderModel');
 const moment = require('moment')
+const Razorpay = require('razorpay')
+
+
+var instance = new Razorpay({ key_id: process.env.RAZORPAY_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET })
 
 const placeOrderPage = async (req, res) => {
     try {
@@ -186,6 +190,23 @@ const placeOrder = async (req, res) => {
             if (req.body.paymentMethod == 'COD') {
                 res.json({ codSuccess: true })
             }
+            else {
+                let order = orderDetails._id
+                let options = {
+                    amount: finalPrice * 100,
+                    currency: "INR",
+                    receipt: "" + order
+                };
+                console.log(options);
+                instance.orders.create(options, function (err, order) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("New Order:", options);
+                        res.json({ options })
+                    }
+                })
+            }
 
         } else {
             res.redirect("/placeOrder");
@@ -225,41 +246,41 @@ const orderSuccess = async (req, res) => {
         let category = await categoryModel.find();
 
         //send order mail
-        
+
         const sendVerifyMail = async (email) => {
             const transporter = nodemailer.createTransport({
-              service: 'gmail',
-              host: 'smtp.gmail.com',
-              port: 465,
-              secure: true,
-              auth: {
-                user: process.env.VERIFICATION_MAIL_ID,
-                pass: process.env.VERIFICATION_MAIL_PASSWORD
-              },
+                service: 'gmail',
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.VERIFICATION_MAIL_ID,
+                    pass: process.env.VERIFICATION_MAIL_PASSWORD
+                },
             });
-          
+
             const mailOptions = {
-              from: process.env.VERIFICATION_MAIL_ID,
-              to: email,
-              subject: "Order Confirmation Mail",
-              html: `
+                from: process.env.VERIFICATION_MAIL_ID,
+                to: email,
+                subject: "Order Confirmation Mail",
+                html: `
               <div class="text-center mb-5 mt-4 d-flex flex-column justify-content-center">
               <h4>Your Order has been placed successfully <i class="fa fa-check"></i></h4>
               `
             };
-          
+
             transporter.sendMail(mailOptions, function (error, info) {
-              if (error) {
-                console.log('Error in sending email  ' + error);
-                return true;
-              } else {
-                console.log('Email sent: ' + info.response);
-                return false;
-              }
+                if (error) {
+                    console.log('Error in sending email  ' + error);
+                    return true;
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    return false;
+                }
             });
-          
-          }
-          sendVerifyMail(userData.email)
+
+        }
+        sendVerifyMail(userData.email)
         res.render('user/orderSuccess', { category, userData, cartCount: cart, wishlistCount: wishlist })
     }
 
@@ -332,12 +353,12 @@ const cancelOrders = async (req, res) => {
         await orderModel.updateOne(
             {
                 _id: orderId
-            }, 
+            },
             {
-            $set: {
-                status: "Cancelled"
+                $set: {
+                    status: "Cancelled"
+                }
             }
-        }
         )
         res.json("Cancelled")
     }
@@ -354,7 +375,7 @@ const cancelOrders = async (req, res) => {
 //             .populate("summary.product")
 //             .populate("couponUsed")
 //         res.json({ orderedProducts })
-        
+
 //     }
 
 //     catch (err) {
@@ -363,18 +384,18 @@ const cancelOrders = async (req, res) => {
 //     }
 // }
 
-const submitReturnOrders=async(req,res)=>{
-    try{
+const submitReturnOrders = async (req, res) => {
+    try {
         let orderId = req.body.orderId
         await orderModel.updateOne(
             {
                 _id: orderId
-            }, 
+            },
             {
-            $set: {
-                status: "Pending"
+                $set: {
+                    status: "Pending"
+                }
             }
-        }
         )
         res.json("Pending")
     }
@@ -384,8 +405,22 @@ const submitReturnOrders=async(req,res)=>{
     }
 }
 
-module.exports = { placeOrderPage, 
+const verifyPayment = async (req, res) => {
+    try {
+        console.log("Payment successful");
+        console.log(req.body);
+        res.json({ status: true })
+    }
+    catch (err) {
+        console.log(err);
+        res.redirect('/') 
+    }
+}
+
+module.exports = {
+    placeOrderPage,
     placeOrder, orderSuccess,
-     viewOrders, getOrderProductDetails,
-      cancelOrders,
-      submitReturnOrders } 
+    viewOrders, getOrderProductDetails,
+    cancelOrders,
+    submitReturnOrders, verifyPayment
+} 

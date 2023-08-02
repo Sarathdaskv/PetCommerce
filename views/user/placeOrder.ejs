@@ -122,10 +122,10 @@
                     <div class="col-lg-12">
                         <h5 class="mb-3 text-uppercase" style="line-height: 1.2;">Payment Methods</h5>
                         <div class="p-4" style="width: 100%; background: #fff;">
-                            <!-- <div class="mb-2">
+                            <div class="mb-2">
                                 <input type="radio" class="form-check-input me-2" name="paymentMethod"
                                     value="Online Bank">Online Payment
-                            </div> -->
+                            </div> 
                             <div class="mb-2">
                                 <input type="radio" class="form-check-input me-2" name="paymentMethod" value="COD">COD
                             </div>
@@ -199,33 +199,30 @@
                 if (response.codSuccess) {
                     location.href = '/orderSuccess'
                 }
-                // else {
-                //     razorpayPayment(response)
-                // }
+                else {
+                    razorpayPayment(response)
+                }
             }
         })
     })
 
 
     function razorpayPayment(order) {
-        var options = {
-            "key": "rzp_test_K9xHI2IycsZVd3", // Enter the Key ID generated from the Dashboard
-            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-            "currency": "INR",
-            "name": "MyCam",
+        try{
+            console.log(order);
+            var options = {
+            "key": 'rzp_test_EdiK4c6mFDOVsA', // Enter the Key ID generated from the Dashboard
+            "amount": order.options.amount,
+            "name": "PetCommerce",
             "description": "Test Transaction",
             "image": "https://example.com/your_logo",
             "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response) {
-                // alert(response.razorpay_payment_id);
-                // alert(response.razorpay_order_id);
-                // alert(response.razorpay_signature);
-
                 verifyPayment(response, order);
             },
             "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
             "prefill": {
-                "name": "Jibi George",
+                "name": "Sarath das",
                 "email": "gaurav.kumar@example.com",
                 "contact": "9999999999"
             },
@@ -238,6 +235,11 @@
         };
         var rzp1 = new Razorpay(options);
         rzp1.open();
+        }
+        catch(err){
+            console.log("def");
+            console.log(err);
+        }
     }
 
     function verifyPayment(payment, order) {
@@ -249,8 +251,8 @@
             },
             method: 'post',
             success:(response)=>{
-                if(response.status){
-                    location.href = '/order-success'
+                if(response.status==true){
+                    location.href = '/orderSuccess'
                 }else{
                     alert("Payment Failed")
                 }
