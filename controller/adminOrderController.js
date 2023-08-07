@@ -6,7 +6,7 @@ const moment = require('moment')
 const viewAllOrders = async (req, res) => {
 
   try {
- 
+
     const allOrders = await orderModel
       .find()
       .populate("customer", "name email")
@@ -60,7 +60,7 @@ const deliverOrder = async (req, res) => {
 
 
     let orderedProductList = await orderModel.findOne({ _id: req.body.orderID })
-    
+
     orderedProductList.summary.forEach(async element => {
       await productModel.findOneAndUpdate({
         _id: element.product
@@ -83,16 +83,16 @@ const deliverOrder = async (req, res) => {
   }
 }
 
-const returnOrder=async(req,res)=>{
-try{
-  await orderModel.findByIdAndUpdate(req.body.orderID, {
-    $set: {
-      status: "Returned",
-    },
-  });
+const returnOrder = async (req, res) => {
+  try {
+    await orderModel.findByIdAndUpdate(req.body.orderID, {
+      $set: {
+        status: "Returned",
+      },
+    });
 
-  let orderedProductList = await orderModel.findOne({ _id: req.body.orderID })
-    
+    let orderedProductList = await orderModel.findOne({ _id: req.body.orderID })
+
     orderedProductList.summary.forEach(async element => {
       await productModel.findOneAndUpdate({
         _id: element.product
@@ -105,14 +105,34 @@ try{
       )
     });
 
-  res.json({
-    data: { returned: 1 },
-  });
-}
+    res.json({
+      data: { returned: 1 },
+    });
+  }
   catch (err) {
     console.log(err);
     res.redirect('/dashboard')
   }
 }
 
-module.exports = { viewAllOrders, orderDetails, deliverOrder,returnOrder }
+const cancelOrder = async (req, res) => {
+  try {
+    let orderId = req.body.orderId;
+    console.log("ewffer ", orderId);
+    await orderModel.updateOne({
+      _id: orderId
+    }, {
+      $set: {
+        status: "Cancelled"
+      }
+    }
+    )
+    res.send({data:"Cancelled"})
+  }
+  catch (err) {
+    console.log(err);
+    res.redirect('/dashboard')
+  }
+}
+
+module.exports = { viewAllOrders, orderDetails, deliverOrder, returnOrder, cancelOrder }

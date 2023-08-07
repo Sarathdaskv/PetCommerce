@@ -155,14 +155,15 @@ const showProductDetails = async (req, res) => {
 
 const searchProducts = async (req, res) => {
     try {
-       
-        let products = await productModel.find({listed:true,
+
+        let products = await productModel.find({
+            listed: true,
             name: {
                 $regex: req.body.searchInput,
                 $options: "i"
             }
         })
-        
+
         res.send({
             products
         })
@@ -173,5 +174,28 @@ const searchProducts = async (req, res) => {
     }
 }
 
+const sortBy = async (req, res) => {
+    try {
+        req.session.listing = await productModel.find({ listed: true });
+        let listing = req.session.listing;
+        if (req.body.sortBy === "ascending") {
+            let products=await productModel.find({ listed: true }).sort({discountPrice:1})
+            
+            res.send({
+                products
+            })
+        } else if (req.body.sortBy === "descending") {
+            let products=await productModel.find({ listed: true }).sort({discountPrice:-1})
+           
+            res.send({
+                products
+            })
+        } 
+    }
+    catch (err) {
+        console.log(err);
+        res.redirect('/')
+    }
+}
 
-module.exports = { getCategoryProducts, filteredProducts, showAllProducts, viewMore, showProductDetails, searchProducts }
+module.exports = { getCategoryProducts, filteredProducts, showAllProducts, viewMore, showProductDetails, searchProducts, sortBy }

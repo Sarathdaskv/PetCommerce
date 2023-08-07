@@ -21,6 +21,16 @@ router
 router
   .route('/dashboard')
   .get(adminSession, dashboard.view) 
+  .put(adminSession,dashboard.chartData)
+
+  router
+  .route("/chart/:id")
+  .get(adminSession,dashboard.customChartData)
+
+
+  router
+  .route('/salesReport')
+  .post(adminSession,dashboard.downloadReport)
 
   //customerManagement
 router
@@ -105,6 +115,10 @@ router
 router
 .route('/orders/return')
 .patch(adminSession,orders.returnOrder)
+
+router
+.route('/cancelOrder')
+.patch(adminSession,orders.cancelOrder)
 
 module.exports=router;    
 

@@ -112,7 +112,7 @@
       <%}%>
   </div>
 </div>
-<div class="d-flex justify-content-around mt-2" >
+<div class="d-flex justify-content-around mt-2 cancelAndPrint" >
     <a href="/admin/orders" style="font-size: 0.7rem;" class="col-3 btn btn-dark d-flex align-items-center justify-content-center px-2 mb-3 text-white"
     ><i class="fa fa-arrow-left mx-1"></i> Back to all orders</a
   > 
@@ -125,6 +125,22 @@
 </div>
 </div>
 <%}%>
-<script src="/js/admin.js></script>
+<script src="/js/admin.js"></script>
+<script>
+  function cancelOrder(id){
+    $.ajax({
+      url:'/admin/cancelOrder',
+      type:'patch',
+      data:{
+        orderId:id
+      },
+      success:(res)=>{
+        if (res.data=="Cancelled") {
+          $(".cancelAndPrint").load(location.href + ".cancelAndPrint" );
+        }
+      }
+    })
+  }
+</script>
 
 <%- include('../layout/adminFooter.ejs') %>

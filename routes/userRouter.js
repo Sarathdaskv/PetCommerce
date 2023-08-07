@@ -69,7 +69,7 @@ router
 .get(userProductController.getCategoryProducts)
 
 router
-.route('/shop/products')
+.route('/shop/products') 
 .get(userProductController.showAllProducts)
 
 router
@@ -79,6 +79,7 @@ router
 router
 .route('/showProducts')
 .get(userProductController.viewMore) 
+.post(userProductController.sortBy)
 
 router
 .route('/searchProducts')

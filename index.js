@@ -45,9 +45,9 @@ app.use(
 app.use('/admin',require('./routes/adminRoutes'))
 app.use('/',require('./routes/userRouter'));
 
-app.use('*',(req,res)=>{
-    res.render('user/pageNotFound',{userData:0})
-})
+// app.use('*',(req,res)=>{
+//     res.render('user/pageNotFound',{userData:0})
+// })
 
 app.listen(PORT,()=>{
     console.log(` Server listening at ${PORT}`);

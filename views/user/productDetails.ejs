@@ -1,14 +1,39 @@
 <%- include('../layout/userHeader.ejs')%>
     <div style="background: #eeeeee;">
+
         <div class="container-fluid pb-5" style="padding-top: 30px;">
+
             <div class="row px-xl-5">
+
                 <div class="col-lg-5" style="margin-bottom: 30px;">
                     <div>
-                        <div class="p-3" style=" width: 100%; height: 492px; background: #fff;">
-                           <img src="/img/products/<%= productData[0].frontImage%>" alt="">
+                        <span class="p-3 mb-3  zoom" style=" width: 100%;  background: #fff;">
+                            <img style="width: 100%;" src="/img/products/<%= productData[0].frontImage%>" alt="">
+                        </span>
+                    </div>
+                    <div class="thumbnails col-7 d-flex" style="margin-left:10px;">
+                        <div class="thumb active ">
+                            <a href="/img/products/<%=productData[0].images[0] %>">
+                                <img src='/img/products/<%=productData[0].images[0] %>' id="thumbimg"
+                                    alt="thumb-air-force-right-side">
+                            </a>
+                        </div>
+                        <div class="thumb">
+                            <a href="/img/products/<%=productData[0].images[1] %>">
+                                <img src="/img/products/<%=productData[0].images[1] %>" id="thumbimg"
+                                    alt="thumb-air-force-left-side">
+                            </a>
+                        </div>
+                        <div class="thumb ">
+                            <a href="/img/products/<%=productData[0].images[2] %>">
+                                <img src="/img/products/<%=productData[0].images[2] %>" id="thumbimg"
+                                    alt="thumb-air-force-bottom-side">
+                            </a>
                         </div>
                     </div>
                 </div>
+
+
                 <div class="col-lg-7 h-auto" style="margin-bottom: 30px;">
                     <div class="" style="padding: 30px; height:100%; background: #fff;">
                         <h4 style="font-weight: 700;">
@@ -17,9 +42,9 @@
                         <div style="display: flex;">
                             <h3 style="font-weight: 700;" class=" me-3">₹<%= productData[0].discountPrice %>
                             </h3>
-                            <!-- <h4 style="font-weight: 700; text-decoration: line-through; color: #6C757D;" class="mb-4">₹
-                                <%= productData[0].actual_Price %>
-                            </h4> -->
+                            <h4 style="font-weight: 700; text-decoration: line-through; color: #6C757D;" class="mb-4">₹
+                                <%= productData[0].price %>
+                            </h4>
                         </div>
                         <div class="d-flex">
                             <span style="font-weight: 600;">Description : <p
@@ -33,7 +58,8 @@
                                 style="color: #3D464D; background-color: #FFD333; border-color: #FFD333;"
                                 onclick="addtoWhislist('<%= productData[0]._id %>')">
                                 <i class="fa-sharp fa-solid fa-heart"></i></button>
-                            <button onclick="addToCart('<%= productData[0]._id %>','<%= productData[0].discountPrice %>')"
+                            <button
+                                onclick="addToCart('<%= productData[0]._id %>','<%= productData[0].discountPrice %>')"
                                 class="btn pro-button px-3"
                                 style="color: #3D464D; background-color: #FFD333; border-color: #FFD333;">
                                 <i class="fa-sharp fa-solid fa-cart-shopping"></i></button>
@@ -73,7 +99,7 @@
                                 <p style="color: #6C757D;">
                                     <%= productData[0].varientName %>
                                 </p>
-                                
+
                             </div>
                             <!-- <div class="tab-pane fade" id="nav-profile" role="tabpanel"
                                 aria-labelledby="nav-profile-tab" tabindex="0">
@@ -97,4 +123,55 @@
             </div>
         </div>
     </div>
+
+    <style>
+        img {
+            display: block;
+            height: auto;
+            max-width: 100%;
+        }
+
+
+        #thumbimg {
+            display: block;
+            height: auto;
+            max-width: 100%;
+        }
+
+        .thumb {
+            opacity: .8;
+            margin: 0 .25rem .25rem 0;
+            transition: opacity .25s ease - out;
+            margin-top: 10px;
+        }
+
+        .thumb:hover,
+        .thumb.active {
+            opacity: 1;
+        }
+
+
+
+        .zoom {
+            display: inline-block;
+        }
+    </style>
+
+
+    <script>
+        $(function () {
+            
+            $('.thumb').on('click', 'a', function (e) {
+                e.preventDefault();
+                var thumb = $(e.delegateTarget);
+                if (!thumb.hasClass('active')) {
+                    thumb.addClass('active').siblings().removeClass('active');
+                    $('.zoom').find('img').attr('src', this.href);
+                }
+            });
+        });
+    </script>
+
+
+
     <%- include('../layout/userFooter.ejs')%>
