@@ -6,6 +6,7 @@ const userWishListController=require('../controller/userWishListController')
 const userProfileController=require('../controller/userProfileController')
 const userOrderController=require('../controller/userOrderController')
 const userSession=require('../middleware/userSession')
+const croppedImgUpload=require('../utilities/cropImage')
 const router=express.Router();
 
 
@@ -133,7 +134,7 @@ router
 
   
 router
-.route('/orders/return')
+.route('/orders/return') 
 .post(userSession.userLoginSession,userOrderController.getOrderProductDetails)
  
 router
@@ -145,9 +146,11 @@ router
 .route('/orders/viewOrderDetails')
 .post(userSession.userLoginSession,userOrderController.getOrderProductDetails)
 
+router
+.route('/orders/printOrder/:id')
+.get(userSession.userLoginSession,userOrderController.getPrintDetails)
 
-
-
+ 
 router
 .route('/wishlist')
 .get(userSession.userLoginSession,userWishListController.showWishlistPage)
@@ -157,8 +160,9 @@ router
 router  
 .route('/userProfile')    
 .get(userSession.userLoginSession,userProfileController.showProfilePage) 
+.post(userSession.userLoginSession,croppedImgUpload.single("photo"),userProfileController.updateUserImage)
 
-router
+router 
 .route('/userProfile/profile/update')
 .put(userSession.userLoginSession,userProfileController.updateProfile) 
 
@@ -166,7 +170,7 @@ router
 .route('/userProfile/email/update') 
 .put(userSession.userLoginSession,userProfileController.updateEmailPhone)
 
-
+ 
 router    
 .route('/userProfile/password/update') 
 .put(userSession.userLoginSession,userProfileController.updatePassword)       

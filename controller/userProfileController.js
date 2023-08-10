@@ -3,6 +3,7 @@ const wishlistModel = require('../model/wishlistModel')
 const userModel = require('../model/userModel')
 const categoryModel = require('../model/categoryModel')
 const bcrypt = require('bcrypt')
+const sharp = require('sharp')
 
 const { default: mongoose } = require('mongoose')
 const userData = require('../model/userModel')
@@ -313,7 +314,7 @@ const deleteAddress = async (req, res) => {
             },
                 {
                     $pull: {
-                        addresses: { 
+                        addresses: {
                             _id: addressID
                         }
                     }
@@ -322,6 +323,33 @@ const deleteAddress = async (req, res) => {
             )
         }
         res.send("deleted")
+    }
+    catch (err) {
+        console.log(err);
+        res.redirect('/')
+    }
+}
+
+const updateUserImage = async (req, res) => {
+    try {
+        let userId = req.session.user._id;
+        let newName = req.body.userName;
+        if (req.file) {
+            await userModel.updateOne(
+                {
+                    _id:userId
+                },{
+                    $set:{
+                        photo:`${req.file.filename}`
+                    }
+                }
+            )
+            res.redirect('/userProfile')
+        } else {
+            res.status(400).send("Please upload a valid image");
+        }
+       console.log("hgrsth",req.file);
+       console.log("name",newName);
     }
     catch (err) {
         console.log(err);
@@ -340,5 +368,6 @@ module.exports = {
     addAddress,
     addressEditPage,
     updateAddress,
-    deleteAddress
+    deleteAddress,
+    updateUserImage
 }

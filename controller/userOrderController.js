@@ -7,7 +7,8 @@ const wishlistModel = require('../model/wishlistModel');
 const { default: mongoose } = require('mongoose');
 const orderModel = require('../model/orderModel');
 const moment = require('moment')
-const Razorpay = require('razorpay')
+const Razorpay = require('razorpay');
+const { Long } = require("mongodb");
 
 
 var instance = new Razorpay({ key_id: process.env.RAZORPAY_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET })
@@ -413,7 +414,28 @@ const verifyPayment = async (req, res) => {
     }
     catch (err) {
         console.log(err);
-        res.redirect('/') 
+        res.redirect('/')
+    }
+}
+
+
+const getPrintDetails = async (req, res) => {
+    try {
+        const currentOrder = await orderModel
+            .findById(req.params.id)
+            .populate("summary.product")
+            .populate("couponUsed");
+            console.log("FEwafef");
+        res.render('user/orderDetails', {
+            currentOrder,
+            moment,
+            documentTitle: "Order Details | PetCommerce",
+        })
+        
+    }
+    catch (err) {
+        console.log(err);
+        res.redirect('/')
     }
 }
 
@@ -422,5 +444,5 @@ module.exports = {
     placeOrder, orderSuccess,
     viewOrders, getOrderProductDetails,
     cancelOrders,
-    submitReturnOrders, verifyPayment
+    submitReturnOrders, verifyPayment, getPrintDetails
 } 
