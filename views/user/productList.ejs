@@ -172,7 +172,7 @@
                     headers: { 'Content-Type': 'application/json' }
                 }).then(res => res.json()).then(data => {
 
-                    if (data.length == 0) {
+                    if (data.products.length == 0) {
                         let productsDetails = `<h2>Sorry No Products Available !</h2>`
                         productList.innerHTML = productsDetails
                     } else {
@@ -237,7 +237,7 @@
                     method: 'get',
                     headers: { 'Content-Type': 'application/json' }
                 }).then(res => res.json()).then(data => {
-                    if (data.length == 0) {
+                    if (data.products.length == 0) {
                         let productsDetails = `<h2>Sorry No Products Available !</h2>`
                         productList.innerHTML = productsDetails
                     } else {
@@ -469,7 +469,7 @@
                         // console.log(result);
                         const data = res
                         
-                        if (data.length == 0) {
+                        if (data.products.length == 0) {
                             let productsDetails = `<h2>Sorry No Products Available !</h2>`
                             productList.innerHTML = productsDetails
                         } else {

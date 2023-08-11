@@ -1,0 +1,212 @@
+<%- include('../layout/userHeader.ejs')%>
+
+
+    <div style="background: #eeeeee;">
+        <!-- Shop Start -->
+        <div class="container-fluid pb-5 products" style="padding-top: 30px; ">
+            <div class="row px-xl-5">
+                <!-- Shop Sidebar Start -->
+                <div class="col-lg-3 col-md-4">
+
+                    <form action="" id="productFilter">
+
+                        <!-- Price Start -->
+                        <!-- <h5 class="section-title position-relative text-uppercase mb-3"><span class="pr-3">Filter
+                            by price</span></h5>
+                    <div class="filter-box p-4" style="max-height: 300px; overflow: auto;">
+                        <div>
+                            
+                            
+                        </div>
+                    </div> -->
+                        <!-- Price End -->
+
+                        <!-- Color Start -->
+
+                        <!-- <div class="input-group">
+                            <div class="form-outline">
+                                <input type="search" id="form1" class="form-control" placeholder="Search"
+                                    id="searchInput" />
+
+                            </div>
+                            <button type="button" class="btn btn-primary" style="height: fit-content;"
+                                onkeyup="search()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <span class="input-group-text" id="searchButton"><button class="btn bg-transparent btn-sm"
+                                    style="font-size: 0.75rem" onclick="removeFilter('none')">
+                                    All Products<br /></button></span>
+                        </div> -->
+
+                        <!-- <div class="container " id="searchList">
+
+                            <div class="input-group flex-nowrap my-2 " style="width: 250px">
+                                <input type="text" class="form-control" placeholder="Search" id="searchInput" />
+                                <button type="button" class="btn btn-primary" style="height: fit-content;"
+                                    onclick="search()">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                 <span class="input-group-text" id="searchButton"><button
+                                            class="btn bg-transparent btn-sm" style="font-size: 0.75rem"
+                                            onclick="removeFilter('none')">
+                                            All Products<br /></button></span> 
+                            </div>
+
+                        </div> -->
+
+
+                        <br>
+<!-- 
+
+                        <h5 class="section-title position-relative text-uppercase mb-3"><span class=" pr-3">Filter
+                                by Category</span></h5>
+                        <div class="filter-box p-4" style="max-height: 300px; overflow: auto;">
+                            <div>
+                                <div class="form-check mb-2">
+                                    <input type="radio" name="category_radio" class="form-check-input" id="" value="">
+                                    <label class="form-check-label" for="color-1">All Category</label>
+                                </div>
+
+                                <% for(var i=0;i<category.length;i++) { %>
+                                    <div class="form-check mb-2">
+                                        <input type="radio" name="category_radio" value="<%= category[i]._id %>"
+                                            class="form-check-input" id="">
+                                        <label class="form-check-label" for="color-1">
+                                            <%= category[i].name %>
+                                        </label>
+                                    </div>
+                                    <% } %>
+                            </div>
+                        </div> -->
+                        <!-- Color End -->
+                        <br>
+                        <!-- <div class="dropdown">
+                            <a class="btn btn-light btn-sm dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Sorting
+                            </a>
+                            <ul class="dropdown-menu">
+
+                                <li>
+                                    <span class="dropdown-item" onclick="sortBy('ascending')">Price: Low to High</span>
+                                </li>
+                                <li>
+                                    <span class="dropdown-item" onclick="sortBy('descending')">Price: High to low</span>
+                                </li>
+                                 <li><a class="dropdown-item" href="#"></a></li> 
+                            </ul>
+                        </div> -->
+
+                    </form>
+                </div>
+                <!-- Shop Sidebar End -->
+
+
+
+                <!-- Shop Product Start -->
+
+                <div class="col-lg-9 col-md-8">
+                    <div class="row pb-3">
+                        <div class="col-12 pb-1">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+
+                                <div class="ml-2">
+
+                                    <!-- <div class="btn-group ml-2">
+                                    <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown"
+                                        style="background: #fff;">Showing</button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#">10</a>
+                                        <a class="dropdown-item" href="#">20</a>
+                                        <a class="dropdown-item" href="#">30</a>
+                                    </div>
+                                </div>  -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                   
+                    <input type="text" style="display: none;" class="form-control" placeholder="Search" id="searchInput" value="<%=id%>" />
+                    <!-- Product Display -->
+                    <div class="row" id="prosList">
+                    </div>
+                   <!-- <div class=" row col-12">
+                    <div class="loading">
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                        <div class="ball"></div>
+                    </div>
+                </div>  -->
+                    <!-- Shop Product End -->
+                </div>
+            </div>
+            <!-- Shop End -->
+        </div>
+        <script>
+             let productList = document.getElementById('prosList')
+             let searchProducts=document.getElementById('searchInput').value
+             $.ajax({
+                    url: "/searchProducts",
+                    method: "put",
+                    data: { searchInput: searchProducts },
+                    success: (res) => {
+                        const data = res
+                        
+                        if (data.products.length==0) {
+                            let productsDetails = `<h2>Sorry No Products Available !</h2>`
+                            productList.innerHTML = productsDetails
+                        } else {
+                            let productsDetails = ``
+                            for (values of data.products) {
+                                productsDetails +=
+                                    `<div class="col-lg-4 col-md-6 col-sm-6 pb-1 pe-3">
+              <div class="product-item mb-4 pb-4">
+                  <div class="product-img position-relative overflow-hidden">
+                      <img class="img-fluid w-100" src="/img/products/${values.thumbnail}" alt="">
+                  </div>
+                  <div class="text-center py-4" style="overflow: hidden;">
+                      <a class="h6 text-decoration-none product_Name "
+                          href="/product/showDetail?id=${values._id}">
+                          <p for="" style="height: 40px; overflow: hidden;">
+                              ${values.name}
+                          </p>
+                      </a>
+                      <div class="d-flex align-items-center justify-content-center mt-2">
+                          <h5 style="font-weight: bold;">Rs. ${values.discountPrice}
+                          </h5>
+                          <h6 class="text-muted ms-2" style="text-decoration: line-through;">Rs.
+                              ${values.price}
+                          </h6>
+                      </div>
+                      <div class="d-flex align-items-center mb-4 pt-2"
+                          style="justify-content: center;">
+                          <button class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;"
+                              onclick="addtoWhislist('${values._id}')">
+                              <i class="fa-sharp fa-solid fa-heart"></i>
+                          </button>
+                          <button
+                              onclick="addToCart('${values._id}','${values.discountPrice}')"
+                              class="btn pro-button"
+                              style="color: #3D464D; background-color: #FFD333; font-weight: bold; border-color: #FFD333;">
+                              <i class="fa-sharp fa-solid fa-cart-shopping"></i>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          </div>`
+                            }
+                            productsDetails +=
+                                ``
+                            productList.innerHTML = productsDetails
+                            // document.getElementById('pid').value = categoryID
+                        }
+                    },
+                });
+
+
+        </script>
+
+        <%- include('../layout/userFooter.ejs')%>

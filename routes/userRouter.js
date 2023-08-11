@@ -57,7 +57,7 @@ router
 .route('/verifyForgotPasswordOtp')
 .post(userHomePageController.verifyForgotPasswordOtp)
 
-router
+router 
 .route('/resendForgotPasswordOtp')
 .get(userHomePageController.resendForgotPasswordOtp)
 
@@ -73,7 +73,7 @@ router
 .route('/shop/products') 
 .get(userProductController.showAllProducts)
 
-router
+router 
 .route('/products/filter')
 .post(userProductController.filteredProducts)
 
@@ -84,7 +84,11 @@ router
 
 router
 .route('/searchProducts')
-.put(userProductController.searchProducts)  
+.put(userProductController.searchProducts)   
+
+router
+.route('/searchHomeProducts') 
+.get(userProductController.searchHomeProducts)
 
 router.route('/product/showDetail')
 .get(userProductController.showProductDetails) 

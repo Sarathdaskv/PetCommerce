@@ -49,10 +49,16 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/">Home</a>
             </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/dogProducts">Dogs</a>
+
+            <li class="nav-item">
+              <form action="/searchHomeProducts" method="get" >
+              <div class="input-group">
+                <input type="search" name="searchField" id="searchField" class="form-control rounded" placeholder="Search"
+                  aria-label="Search" aria-describedby="search-addon" />
+                <button type="submit"  class="btn btn-outline-primary">search</button>
+              </div>
+            </form>
             </li>
-             -->
           </ul>
         </div>
         <% if (userData) { %>
@@ -83,3 +89,5 @@
       </div>
     </nav>
   </section>
+
+  

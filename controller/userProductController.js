@@ -179,18 +179,18 @@ const sortBy = async (req, res) => {
         req.session.listing = await productModel.find({ listed: true });
         let listing = req.session.listing;
         if (req.body.sortBy === "ascending") {
-            let products=await productModel.find({ listed: true }).sort({discountPrice:1})
-            
+            let products = await productModel.find({ listed: true }).sort({ discountPrice: 1 })
+
             res.send({
                 products
             })
         } else if (req.body.sortBy === "descending") {
-            let products=await productModel.find({ listed: true }).sort({discountPrice:-1})
-           
+            let products = await productModel.find({ listed: true }).sort({ discountPrice: -1 })
+
             res.send({
                 products
             })
-        } 
+        }
     }
     catch (err) {
         console.log(err);
@@ -198,4 +198,42 @@ const sortBy = async (req, res) => {
     }
 }
 
-module.exports = { getCategoryProducts, filteredProducts, showAllProducts, viewMore, showProductDetails, searchProducts, sortBy }
+
+const searchHomeProducts = async (req, res) => {
+    try {
+        console.log("yur",req.query.searchField);
+        let categoryId = req.query.searchField
+        let userData = req.session.user
+        let cartCount = null;
+        let wishlistCount = null;
+        let cart = 0;
+        let wishlist = 0;
+        if (req.session.userLoggedIn) {
+            cartCount = await cartModel.find({ customer: userData._id })
+            cart = cartCount[0].totalQuantity;
+            wishlistCount = await wishlistModel.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        totalSize: {
+                            $sum: {
+                                $size: "$products"
+                            }
+                        }
+                    }
+                }
+            ])
+            wishlist = parseInt(wishlistCount[0].totalSize);
+        }
+
+        const productList = await productModel.find({ listed: true });
+        const categoryList = await categoryModel.find();
+        res.render('user/searchHomeProducts', { userData, cartCount: cart, wishlistCount: wishlist, category: categoryList, id: categoryId, products: productList })
+
+    }
+    catch (err) {
+        console.log(err);
+        res.redirect('/')
+    }
+}
+module.exports = { searchHomeProducts, getCategoryProducts, filteredProducts, showAllProducts, viewMore, showProductDetails, searchProducts, sortBy }
