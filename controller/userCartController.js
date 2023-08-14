@@ -168,8 +168,8 @@ const reduceCount = async (req, res) => {
           {
             $inc: {
               "products.$.quantity": -1,
-              totalPrice: -product.price,
-              "products.$.price": -product.price,
+              totalPrice: -product.discountPrice,
+              "products.$.price": -product.discountPrice,
               totalQuantity: -1,
             },
           }
@@ -196,8 +196,8 @@ const reduceCount = async (req, res) => {
           {
             $inc: {
               "products.$.quantity": -1,
-              totalPrice: -product.price,
-              "products.$.price": -product.price,
+              totalPrice: -product.discountPrice,
+              "products.$.price": -product.discountPrice,
               totalQuantity: -1,
             },
           },
@@ -254,7 +254,7 @@ const addCount = async (req, res) => {
           $inc: {
             "products.$.quantity": 1,
             "products.$.price": product.discountPrice,
-            totalPrice: product.price,
+            totalPrice: product.discountPrice,
             totalQuantity: 1,
           }
 
@@ -296,9 +296,9 @@ const removeProducts = async (req, res) => {
             "products.name": new mongoose.Types.ObjectId(req.body.id),
           },
         },
-      ]);
+      ]);  
       const cartID = productFromCart[0]._id;
-      productFromCart = productFromCart[0].products;
+      productFromCart = productFromCart[0].products; 
       await cartModel.findByIdAndUpdate(cartID, {
         $pull: {
           products: {

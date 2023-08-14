@@ -316,7 +316,7 @@ const viewOrders = async (req, res) => {
             wishlist = parseInt(wishlistCount[0].totalSize);
         }
         let category = await categoryModel.find();
-        let orderedProductList = await orderModel.find({ customer: userData._id });
+        let orderedProductList = await orderModel.find({ customer: userData._id }).sort({orderedOn:-1});
         let date = new Date();
         if (orderedProductList != "") {
 

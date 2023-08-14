@@ -19,7 +19,7 @@ const viewAllOrders = async (req, res) => {
       documentTitle: "Orders ",
       moment,
       session: req.session.admin,
-    });
+    }); 
 
   }
   catch (err) {
