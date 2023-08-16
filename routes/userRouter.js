@@ -7,7 +7,6 @@ const userProfileController=require('../controller/userProfileController')
 const userOrderController=require('../controller/userOrderController')
 const userSession=require('../middleware/userSession')
 const croppedImgUpload=require('../utilities/cropImage')
-
 const router=express.Router();
 
 
