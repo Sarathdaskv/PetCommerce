@@ -1,7 +1,7 @@
 const orderModel = require('../model/orderModel')
 const productModel = require('../model/productModel')
 const moment = require('moment')
-
+const mongoose = require('mongoose')
 
 const viewAllOrders = async (req, res) => {
 
@@ -120,7 +120,7 @@ const cancelOrder = async (req, res) => {
     let orderId = req.body.orderId;
     console.log("ewffer ", orderId);
     await orderModel.updateOne({
-      _id: orderId
+      _id:new mongoose.Types.ObjectId(orderId) 
     }, {
       $set: {
         status: "Cancelled"

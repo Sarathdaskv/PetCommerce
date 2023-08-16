@@ -136,7 +136,8 @@
       },
       success:(res)=>{
         if (res.data=="Cancelled") {
-          $(".cancelAndPrint").load(location.href + ".cancelAndPrint" );
+         // $(".cancelAndPrint").load(location.href + ".cancelAndPrint" );
+         location.reload();
         }
       }
     })
