@@ -64,7 +64,7 @@ const registerUserDetails = async (req, res) => {
       req.session.otp = OTP;
       console.log("old-", req.session.otp);
 
-      res.render('user/OtpVerification', { userId: 0, errMsg: false })
+      res.render('user/otpVerification', { userId: 0, errMsg: false })
     }
   }
   catch (error) {
@@ -132,7 +132,7 @@ const resendOtp = async (req, res) => {
     req.session.targetTime = Date.now() + 30000;
     req.session.otp = OTP;
     console.log("new-", req.session.otp);
-    res.render('user/OtpVerification', { userId: 0, errMsg: false })
+    res.render('user/otpVerification', { userId: 0, errMsg: false })
 
   }
   catch (err) {
