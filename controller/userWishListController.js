@@ -33,7 +33,7 @@ const showWishlistPage = async (req, res) => {
         let wishlistData = await wishlistModel.findOne({ customer: userData._id }).populate("products")
         console.log(wishlistData);
 
-        res.render('user/wishlist', { userData, cartCount: cart, wishlistCount: wishlist, category, wishList: wishlistData })
+        res.render('user/wishList', { userData, cartCount: cart, wishlistCount: wishlist, category, wishList: wishlistData })
     }
     catch (err) {
         console.log(err);
