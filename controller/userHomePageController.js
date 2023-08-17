@@ -126,8 +126,8 @@ const otpVerfication = async (req, res) => {
 const resendOtp = async (req, res) => {
   try {
     const { name, email } = req.session.userDetails
-    sendVerifyMail(name, email)
     OTP = `${Math.floor(10000 + Math.random() * 90000)}`;
+    sendVerifyMail(name, email)
     req.session.currentTime = Date.now();
     req.session.targetTime = Date.now() + 30000;
     req.session.otp = OTP;
