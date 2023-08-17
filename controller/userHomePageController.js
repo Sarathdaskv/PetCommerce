@@ -110,11 +110,11 @@ const otpVerfication = async (req, res) => {
         console.log("cart and whislist created");
       }
       else {
-        res.render('user/OtpVerification', { userId: 0, errMsg: 'invalid OTP,kindly wait' })
+        res.render('user/otpVerification', { userId: 0, errMsg: 'invalid OTP,kindly wait' })
       }
     }
     else {
-      res.render('user/OtpVerification', { userId: 0, errMsg: 'OTP timed out,kindly wait' })
+      res.render('user/otpVerification', { userId: 0, errMsg: 'OTP timed out,kindly wait' })
     }
 
   }
